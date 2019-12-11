@@ -1,0 +1,671 @@
+\documentclass[a4paper, 11pt]{report}
+\usepackage{../../preamble}
+
+
+\begin{document}
+
+\doctype{Homework}
+\coursetitle{Convex Optimization and applications in Machine Learning}
+\semester{MVA Fall 2019}
+\instructor{Alexandre d'Aspremont}
+\student{Antoine Moulin}
+\worknumber{2}
+\workdate{November 4}
+
+\maketitle
+
+\section*{Exercise 1 (LP Duality)}
+
+For given $c \in \R^{d}, b \in \Rn$ and $A \in \R^{n \times d}$ consider the two following linear optimization problems,
+
+\begin{equation}
+\tag{P}
+    \begin{aligned}
+    & \min_{x}
+    c^{T} x \\
+    \text{ s.t. }
+    & Ax = b \\
+    & x \succeq 0
+    \end{aligned}
+\label{eq:pb-P}
+\end{equation}
+
+\noindent and
+
+\begin{equation}
+\tag{D}
+    \begin{aligned}
+    & \max_{y}
+    b^{T} y \\
+    \text{ s.t. }
+    & A^{T} y \preceq c
+    \end{aligned}
+\label{eq:pb-D}
+\end{equation}
+
+\begin{enumerate}
+    \item Compute the dual of problem (\ref{eq:pb-P}) and simplify it if possible.
+    
+    \item Compute the dual of problem (\ref{eq:pb-D}).
+    
+    \item A problem is called \emph{self-dual} if its dual is the problem itself. Prove that the following problem is self-dual.
+    
+    \begin{equation}
+    \tag{Self-Dual}
+        \begin{aligned}
+        & \min_{x, y}
+        c^{T} x - b^{T} y \\
+        \text{ s.t. }
+        & Ax = b \\
+        & x \succeq 0 \\
+        & A^{T} y \preceq c
+        \end{aligned}
+    \label{eq:self-dual}
+    \end{equation}
+
+    \item Assume the above problem feasible and bounded, and let $[x^{*}, y^{*}]$ be its optimal solution. Using the strong duality property of linear programs, show that
+    
+    \begin{itemize}
+        \item the vector $[x^{*}, y^{*}]$ can also be obtained by solving (\ref{eq:pb-P}) and (\ref{eq:pb-D}),
+        
+        \item the optimal value of (\ref{eq:self-dual}) is exactly $0$.
+    \end{itemize}
+\end{enumerate}
+
+\noindent \textbf{Solution.}
+
+\begin{enumerate}
+    \item Let $x \in \Rd, \lambda \in \Rd, \nu \in \Rn$. The Lagrangian function of (\ref{eq:pb-P}) is given by
+    
+    \[ \mathcal{L} \left( x, \lambda, \nu \right) = c^{T} x - \lambda^{T} x + \nu^{T} \left( Ax - b \right) = \left( c - \lambda + A^{T} \nu \right)^{T} x - b^{T} \nu \]
+    
+    As the Lagrangian is linear in $x$, the Lagrange dual function is
+    
+    \begin{equation*}
+        g \left( \lambda, \nu \right) = \begin{cases}
+        - b^{T} \nu & \text{ if } c - \lambda + A^{T} \nu = 0 \\
+        - \infty & \text{ otherwise }
+        \end{cases}
+    \end{equation*}
+    
+    \pagebreak
+    
+    Hence, the dual of problem (\ref{eq:pb-P}) is
+
+    \begin{equation*}
+        \begin{aligned}
+        & \max_{\nu} 
+        - b^{T} \nu \\
+        \text{ s.t. }
+        & A^{T} \nu + c - \lambda = 0 \\
+        & \lambda \succeq 0
+        \end{aligned}
+    \end{equation*}
+    
+    which can be simplified in
+    
+    \begin{equation*}
+        \boxed{\begin{aligned}
+        & \max_{\nu} 
+        - b^{T} \nu \\
+        \text{ s.t. }
+        & A^{T} \nu + c \succeq 0
+        \end{aligned}}
+    \end{equation*}
+
+    \item The problem (\ref{eq:pb-D}) is equivalent to:
+    
+    \begin{equation*}
+        \begin{aligned}
+        & \min_{y}
+        - b^{T} y \\
+        \text{ s.t. }
+        & A^{T} y \preceq c
+        \end{aligned}
+    \end{equation*}
+    
+    Let $y \in \Rn, \lambda \in \Rd$. Its Lagrangian function is given by
+    
+    \[ \mathcal{L} \left( y, \lambda \right) = - b^{T} y + \lambda^{T} \left( A^{T} y - c \right) = \left( A \lambda - b \right)^{T} y - c^{T} \lambda \]
+
+    As the Lagrangian is linear in $y$, the Lagrange dual function is
+    
+    \begin{equation*}
+        g \left( \lambda \right) = \begin{cases}
+        - c^{T} \lambda & \text{ if } A \lambda - b = 0 \\
+        - \infty & \text{ otherwise }
+        \end{cases}
+    \end{equation*}
+    
+    Hence, the dual of problem (\ref{eq:pb-D}) is
+    
+    \begin{equation*}
+        \boxed{\begin{aligned}
+        & \max_{\lambda} 
+        - c^{T} \lambda \\
+        \text{ s.t. }
+        & A \lambda = b \\
+        & \lambda \succeq 0
+        \end{aligned}}
+    \end{equation*}
+
+    \item Let $x \in \Rd, y \in \Rn, \lambda_{1} \in \Rd, \lambda_{2} \in \Rd, \nu \in \Rn$. The Lagrangian function of (\ref{eq:self-dual}) is given by
+    
+    \begin{equation*}
+        \begin{aligned}
+        \mathcal{L} \left( x, y, \lambda_{1}, \lambda_{2}, \nu \right) &= c^{T} x - b^{T} y - \lambda_{1}^{T} x + \lambda_{2}^{T} \left( A^{T} y - c \right) + \nu^{T} \left( b - Ax \right) \\
+        &= \left( c - \lambda_{1} - A^{T} \nu \right)^{T} x + \left( A \lambda_{2} - b \right)^{T} y - c^{T} \lambda_{2} + b^{T} \nu
+        \end{aligned}
+    \end{equation*}
+    
+    As the Lagrangian is linear in $x$ and $y$, the Lagrange dual function is
+    
+    \begin{equation*}
+        g \left( \lambda_{1}, \lambda_{2}, \nu \right) = \begin{cases}
+        - c^{T} \lambda_{2} + b^{T} \nu & \text{ if } c - \lambda_{1} - A^{T} \nu = 0 \text{ and } A \lambda_{2} - b = 0 \\
+        - \infty & \text{ otherwise }
+        \end{cases}
+    \end{equation*}
+    
+    Hence, the dual of problem (\ref{eq:self-dual}) is
+    
+    \begin{equation*}
+        \begin{aligned}
+        & \max_{\lambda_{1}, \lambda_{2}, \nu}
+        - c^{T} \lambda_{2} + b^{T} \nu \\
+        \text{ s.t. }
+        & A \lambda_{2} - b = 0 \\
+        & c - \lambda_{1} - A^{T} \nu = 0 \\
+        & \lambda_{1} \succeq 0 \\
+        & \lambda_{2} \succeq 0
+        \end{aligned}
+    \end{equation*}
+    
+    \pagebreak
+    
+    which is equivalent to
+    
+    \begin{equation*}
+        \begin{aligned}
+        & \max_{\lambda_{2}, \nu}
+        - c^{T} \lambda_{2} + b^{T} \nu \\
+        \text{ s.t. }
+        & A \lambda_{2} = b \\
+        & \lambda_{2} \succeq 0 \\
+        & A^{T} \nu \preceq c
+        \end{aligned}
+    \end{equation*}
+    
+    Changing the notations, $\lambda_{2} \leftrightarrow x$ and $\nu \leftrightarrow y$, and changing the $\max$ in $\min$, we obtain:
+    
+    \begin{equation*}
+        \boxed{\begin{aligned}
+        & \min_{x, y}
+        c^{T} x - b^{T} y \\
+        \text{ s.t. }
+        & A x = b \\
+        & x \succeq 0 \\
+        & A^{T} y \preceq c
+        \end{aligned}}
+    \end{equation*}
+    
+    which is exactly the problem (\ref{eq:self-dual}). \\
+    
+    \item 
+    \begin{itemize}
+    \item The constraints of the problem (\ref{eq:self-dual}) are independent, \ie, only depends on the variable $x$ or $y$. If we first optimize the function with respect to $y$ and then with respect to $x$, we can write that:
+    
+    \[ \min_{x, y} c^{T} x - b^{T} y = \min_{x} c^{T} x + \min_{y} - b^{T} y = \min_{x} c^{T} x - \max_{y} b^{T} y \]
+    
+    under the associated constraints. We recognize that it is the problem (\ref{eq:pb-P}) minus the problem (\ref{eq:pb-D}). \\
+    
+    \fbox{\parbox{.88\textwidth}{By solving (\ref{eq:pb-P}) and (\ref{eq:pb-D}), which give us the optimal points $x^{*}$ and $y^{*}$ respectively, we also solve the problem (\ref{eq:self-dual}) and $[x^{*}, y^{*}]$ is an optimal point.}} \\
+    
+    \item If we write precisely the above equality, we have:
+    
+    \begin{equation*}
+    \begin{aligned}
+                  & \min_{x, y} c^{T} x - b^{T} y   & = &               & \min_{x} c^{T} x  & \hspace{0.5cm} - \hspace{0.2cm} &               & \max_{y} b^{T} y \\
+    \text{ s.t. } & Ax = b                          &   & \text{ s.t. }\hspace{-.4cm} & Ax = b            &   & \text{ s.t. } & A^{T}y \preceq c \\
+                  & x \succeq 0                     &   &               & x \succeq 0       &   &               &                  \\
+                  & A^{T} y \preceq c               &   &               &                   &   &               &
+    \end{aligned}
+    \end{equation*}
+    
+    On the left, we have the (\ref{eq:self-dual}) problem. The first term on the right is the problem (\ref{eq:pb-P}) and the second term is the problem (\ref{eq:pb-D}). If we make a change of variable in (\ref{eq:pb-D}) ($y \leftrightarrow - \nu$), we see that it is the dual problem of (\ref{eq:pb-P}) (see question 1). \\
+    
+    The constraints in (\ref{eq:pb-P}) are a linear equality and a linear inequality. Besides, the domain of the objective function (which is $\Rd$) is open. Hence, as the problem is supposed feasible, we know by the Slater's condition that strong duality holds. If we denote by $p^{*}$ the optimal value of (\ref{eq:pb-P}) and by $d^{*}$ the optimal value of (\ref{eq:pb-D}), we have:
+    
+    \begin{equation*}
+        \boxed{\begin{aligned}
+        & \min_{x, y}
+        c^{T} x - b^{T} y & = \hspace{.2cm} p^{*} - d^{*} = 0 \\
+        \text{ s.t. }
+        & A x = b \\
+        & x \succeq 0 \\
+        & A^{T} y \preceq c
+        \end{aligned}}
+    \end{equation*}
+    \end{itemize}
+\end{enumerate}
+
+\pagebreak
+
+\section*{Exercise 2 (Regularized Least-Square)}
+
+For given $A \in \R^{n \times d}$ and $b \in \Rn$, consider the following optimization problem,
+
+\begin{equation}
+\tag{RLS}
+\min_{x} \norm{Ax - b}{2}^{2} + \norm{x}{1}
+\label{eq:pb-RLS}
+\end{equation}
+
+\begin{enumerate}
+    \item Compute the conjugate of $\norm{x}{1}$.
+    
+    \item Compute the dual of (\ref{eq:pb-RLS}).
+\end{enumerate}
+
+\noindent \textbf{Solution.}
+
+\begin{enumerate}
+    \item Let $x, y \in \Rd$, $f = \norm{\cdot}{1}$. We have
+    
+    \[ y^{T} x - f(x) = \sum_{i=1}^{d} y_{i} x_{i} - \sum_{i=1}^{d} \left| x_{i} \right| \]
+    
+    Suppose there exists a $j \in [\![ 1, d ]\!]$ such that $y_{j} > 1$. We choose $x$ such that $x_{j} = t > 0$ and $x_{i} = 0$ for $i \neq j$. We have $y^{T} x - f(x) = \left( y_{j} - 1 \right) t \underset{t \rightarrow + \infty}{\longrightarrow} + \infty$, hence $f^{*}(y) = + \infty$. 
+    
+    Similarly, if $y_{j} < -1$, we take $t < 0$ and $y^{T} x - f(x) = \left( y_{j} + 1 \right) t \underset{t \rightarrow - \infty}{\longrightarrow} + \infty$, \ie $f^{*}(y) = + \infty$.
+    
+    Let suppose $\norm{y}{\infty} \leq 1$. We have
+    
+    \begin{equation*}
+        \begin{aligned}
+        y^{T} x - f(x) &\leq \sum_{i=1}^{d} \left| y_{i} x_{i} \right| - \sum_{i=1}^{d} \left| x_{i} \right| \\
+        &\leq \sum_{i=1}^{d} \underbrace{\left( \left| y_{i} \right| - 1 \right)}_{\leq 0} \left| x_{i} \right| \\
+        &\leq 0
+        \end{aligned}
+    \end{equation*}
+    
+    with equality if $x = 0$. Hence, $f^{*}(y) = 0$. Finally,
+    
+    \begin{equation*}
+        \boxed{\norm{\cdot}{1}^{*}(y) = \begin{cases}
+        0 & \text{ if } \norm{y}{\infty} \leq 1 \\
+        + \infty & \text{ otherwise }
+        \end{cases}}
+    \end{equation*}
+    
+    \item The problem (\ref{eq:pb-RLS}) is equivalent to
+
+    \begin{equation}
+        \begin{aligned}
+        & \min_{x}
+        \norm{y}{2}^{2} + \norm{x}{1} \\
+        \text{ s.t. }
+        & y = Ax - b
+        \end{aligned}
+    \end{equation}
+    
+    Let $x \in \Rd, y \in \Rn, \nu \in \Rn$. The Lagrangian function of the new problem is given by
+    
+    \begin{equation*}
+        \begin{aligned}
+        \mathcal{L} \left( x, y, \nu \right) &= \norm{y}{2}^{2} + \norm{x}{1} + \nu^{T} \left( y - Ax + b \right) \\
+        &= \norm{y}{2}^{2} + \nu^{T} y + \norm{x}{1} - \left( A^{T} \nu \right)^{T} x + \nu^{T} b
+        \end{aligned}
+    \end{equation*}
+    
+    and the dual function is
+    
+        \begin{equation*}
+        \begin{aligned}
+        g \left( \nu \right) &= \inf_{x, y} \mathcal{L} \left( x, y, \nu \right) \\
+        &= b^{T} \nu + \inf_{y} \left( \norm{y}{2}^{2} + \nu^{T} y \right) + \inf_{x} \left( \norm{x}{1} - \left( A^{T} \nu \right)^{T} x \right)
+        \end{aligned}
+    \end{equation*}
+    
+    The function $h: y \mapsto \norm{y}{2}^{2} + \nu^{T} y$ is convex and differentiable. Its gradient is given by $\nabla h (y) = 2y + \nu$ and we have $\nabla h(y) = 0$ iff $y = - \frac{1}{2} \nu$. Hence, the minimum of $h$ is $\frac{1}{4} \norm{\nu}{2}^{2} - \frac{1}{2} \norm{\nu}{2}^{2} = - \frac{1}{4} \norm{\nu}{2}^{2}$.
+    
+    We can express the last term using the conjugate of $\norm{\cdot}{1}$:
+    
+    \[ \inf_{x} \norm{x}{1} - \left( A^{T} \nu \right)^{T} x = \sup_{x} \left( A^{T} \nu \right)^{T} x - \norm{x}{1} = \norm{\cdot}{1}^{*} \left( A^{T} \nu \right) \]
+    
+    Thus,
+    
+    \[ g \left( \nu \right) = b^{T} \nu - \frac{1}{4} \norm{\nu}{2}^{2} + \norm{\cdot}{1}^{*} \left( A^{T} \nu \right) \]
+    
+    $\norm{\cdot}{1}^{*}$ is the indicator function of the $\norm{\cdot}{\infty}$-unit ball. Hence, the dual problem of (\ref{eq:pb-RLS}) is
+    
+    \begin{equation*}
+        \boxed{\begin{aligned}
+        & \max_{\nu} b^{T} \nu - \frac{1}{4} \norm{\nu}{2}^{2} \\
+        \text{ s.t. } & \norm{A^{T} \nu}{\infty} \leq 1
+        \end{aligned}}
+    \end{equation*}
+\end{enumerate}
+
+\section*{Exercise 3 (Data Separation)}
+
+Assume we have $n$ data points $x_{i} \in \R^{d}$, with label $y_{i} \in \lbrace -1, 1 \rbrace$. We are searching for an hyper-plane defined by its normal $\omega$, which separates the points according to their label. Ideally, we would like to have
+
+\begin{equation*}
+    \omega^{T} x_{i} \leq -1 \Rightarrow y_{i} = -1 \text{\,\, and \,\,} \omega^{T} x_{i} \geq 1 \Rightarrow y_{i} = 1
+\end{equation*}
+
+\noindent Unfortunately, this condition is rarely met with real-life problems. Instead, we solve an optimization problem which minimizes the gap between the hyper-plane and the miss-classified points. To do so, we will use a specific loss function
+
+\begin{equation*}
+    \mathcal{L} \left( \omega, x_{i}, y_{i} \right) = \max \left\{ 0, 1 - y_{i} \left( \omega^{T} x_{i} \right) \right\}
+\end{equation*}
+
+\noindent which is equal to $0$ when the point $x_{i}$ is well-classified (the sign of $\omega^{T} x_{i}$ and $y_{i}$ are the same), but is strictly positive when the sign of $w^{T} x_{i}$ and $y_{i}$ are different. To improve the performances, instead of minimizing the loss function alone, we also use a quadratic regularizer as follow,
+
+\begin{equation}
+\tag{Sep. 1}
+\min_{\omega} \frac{1}{n} \sum_{i=1}^{n} \mathcal{L} \left( \omega, x_{i}, y_{i} \right) + \frac{\tau}{2} \norm{\omega}{2}^{2}
+\label{eq:sep-1}
+\end{equation}
+
+\noindent where $\tau$ is the regularization parameter.
+
+\begin{enumerate}
+    \item Consider the following quadratic optimization problem ($\mathbf{1}$ is a vector full of ones),
+    
+    \begin{equation}
+    \tag{Sep. 2}
+        \begin{aligned}
+        & \min_{\omega, z} \frac{1}{n \tau} \mathbf{1}^{T}z + \frac{1}{2} \norm{\omega}{2}^{2} \\
+        \text{ s.t. }
+        & \forall i \in [\![ 1, n ]\!], z_{i} \geq 1 - y_{i} \left( \omega^{T} x_{i} \right) & (\lambda_{i}) \\
+        & z \succeq 0 & (\pi)
+        \end{aligned}
+    \label{eq:sep-2}
+    \end{equation}
+    
+    Explain why problem (\ref{eq:sep-2}) solves problem (\ref{eq:sep-1}).
+    
+    \item Compute the dual of (\ref{eq:sep-2}), and try to reduce the number of variables. Use the notations $\lambda_{i}$ and $\pi$ for the dual variables.
+\end{enumerate}
+
+\noindent \textbf{Solution.}
+
+\begin{enumerate}
+    \item If we first minimize with respect to $\omega$ and then with respect to $z$, (\ref{eq:sep-2}) is equivalent to
+    
+        \begin{equation*}
+            \begin{aligned}
+            \min_{\omega} \frac{1}{2} \norm{\omega}{2}^{2} & + & & \min_{z} \frac{1}{n \tau} \mathbf{1}^{T}z \\
+            & & \text{ s.t. }
+            & \forall i \in [\![ 1, n ]\!], z_{i} \geq 1 - y_{i} \left( \omega^{T} x_{i} \right) \\
+            & & & z \succeq 0
+            \end{aligned}
+        \end{equation*}
+        
+    The minimization problem with respect to $z$ is immediate as the objective function is linear in $z$ and we have a lower bound on each component of $z$. Hence, we have
+    
+    \begin{equation*}
+        \begin{aligned}
+        & \min_{z} \frac{1}{n \tau} \mathbf{1}^{T} z & = \frac{1}{n \tau} \sum_{i=1}^{n} \max \left\{ 0, 1 - y_{i} \left( \omega^{T} x_{i} \right) \right\} \\
+        \text{ s.t. } & \forall i \in [\![ 1, n ]\!], z_{i} \geq 1 - y_{i} \left( \omega^{T} x_{i} \right) \\
+        & z \succeq 0
+        \end{aligned}
+    \end{equation*}
+    
+    and the problem is equivalent to
+    
+    \begin{equation}
+    \min_{\omega} \frac{1}{n \tau} \sum_{i=1}^{n} \max \left\{ 0, 1 - y_{i} \left( \omega^{T} x_{i} \right) \right\} + \frac{1}{2} \norm{\omega}{2}^{2}
+    \end{equation}
+    
+    Multiplying by $\tau > 0$ and using the definition of the loss function, we see that
+    \begin{center}
+    \fbox{\parbox{.3\textwidth}{(\ref{eq:sep-2}) is equivalent to (\ref{eq:sep-1})}}
+    \end{center}
+    
+    \item Let $z \in \Rn, \omega \in \Rd, \lambda \in \Rn, \pi \in \Rn$. The Lagrangian function of (\ref{eq:sep-2}) is given by
+    
+    \begin{equation*}
+        \begin{aligned}
+        \mathcal{L} \left( z, \omega, \lambda, \pi \right) &= \frac{1}{n \tau} \mathbf{1}^{T} z + \frac{1}{2} \norm{\omega}{2}^{2} + \sum_{i=1}^{n} \lambda_{i} \left[ 1 - y_{i} \left( \omega^{T} x_{i} \right) - z_{i} \right] - \pi^{T} z \\
+        &= \left( \frac{1}{n \tau} \mathbf{1} - \lambda - \pi \right)^{T} z + \frac{1}{2} \norm{\omega}{2}^{2} - \sum_{i=1}^{n} \lambda_{i} y_{i} \left( \omega^{T} x_{i} \right) + \mathbf{1}^{T} \lambda
+        \end{aligned}
+    \end{equation*}
+    
+    Let's compute the dual function.
+    
+    \begin{equation*}
+        \begin{aligned}
+        g \left( \lambda, \pi \right) &= \inf_{z, \omega} \left( \frac{1}{n \tau} \mathbf{1} - \lambda - \pi \right)^{T} z + \frac{1}{2} \norm{\omega}{2}^{2} - \sum_{i=1}^{n} \lambda_{i} y_{i} \left( \omega^{T} x_{i} \right) + \mathbf{1}^{T} \lambda \\
+        &= \begin{cases}
+        \mathbf{1}^{T} \lambda + \inf_{\omega} \frac{1}{2} \norm{\omega}{2}^{2} - \sum_{i=1}^{n} \lambda_{i} y_{i} \left( \omega^{T} x_{i} \right) & \text{ if } \frac{1}{n \tau} \mathbf{1} - \lambda - \pi = 0 \\
+        - \infty & \text{ otherwise }
+        \end{cases}
+        \end{aligned}
+    \end{equation*}
+    
+    Let $h: \omega \mapsto \frac{1}{2} \norm{\omega}{2}^{2} - \sum_{i=1}^{n} \lambda_{i} y_{i} \left( \omega^{T} x_{i} \right)$. $h$ is differentiable and convex. Its gradient is given by $\nabla h(\omega) = \omega - \sum_{i=1}^{n} \lambda_{i} y_{i} x_{i}$. We have $\nabla h(\omega) = 0$ iff $\omega_{min} = \sum_{i=1}^{n} \lambda_{i} y_{i} x_{i}$, and at this point:
+    
+    \begin{equation*}
+        \begin{aligned}
+        h \left( \omega_{min} \right) &= \frac{1}{2} \left( \sum_{i=1}^{n} \lambda_{i} y_{i} x_{i} \right)^{T} \left( \sum_{i=1}^{n} \lambda_{i} y_{i} x_{i} \right) - \sum_{i=1}^{n} \lambda_{i} y_{i} \left( \sum_{j=1}^{n} \lambda_{j} y_{j} x_{j} \right)^{T} x_{i} \\
+        &= \frac{1}{2} \sum_{1 \leq i, j \leq n} \lambda_{i} \lambda_{j} y_{i} y_{j} x_{i}^{T} x_{j} - \sum_{1 \leq i, j \leq n} \lambda_{i} \lambda_{j} y_{i} y_{j} x_{i}^{T} x_{j} \\
+        &= - \frac{1}{2} \sum_{1 \leq i, j \leq n} \lambda_{i} \lambda_{j} y_{i} y_{j} x_{i}^{T} x_{j}
+        \end{aligned}
+    \end{equation*}
+    
+    Hence,
+    
+    \begin{equation*}
+        \begin{aligned}
+        g \left( \lambda, \pi \right) &= \begin{cases}
+        \sum_{i=1}^{n} \lambda_{i} - \frac{1}{2} \sum_{1 \leq i, j \leq n} \lambda_{i} \lambda_{j} y_{i} y_{j} x_{i}^{T} x_{j} & \text{ if } \frac{1}{n \tau} \mathbf{1} - \lambda - \pi = 0 \\
+        - \infty & \text{ otherwise }
+        \end{cases}
+        \end{aligned}
+    \end{equation*}
+    
+    \pagebreak
+    
+    Finally, the dual of (\ref{eq:sep-2}) is
+    
+    \begin{equation*}
+        \begin{aligned}
+        & \max_{\lambda, \pi}  \sum_{i=1}^{n} \lambda_{i} - \frac{1}{2} \sum_{1 \leq i, j \leq n} \lambda_{i} \lambda_{j} y_{i} y_{j} x_{i}^{T} x_{j} \\
+        \text{ s.t. } & \frac{1}{n \tau} \mathbf{1} - \lambda - \pi = 0 \\
+        & \lambda \succeq 0 \\
+        & \pi \succeq 0
+        \end{aligned}
+    \end{equation*}
+    
+    which can be simplified as
+    
+    \begin{equation*}
+        \boxed{\begin{aligned}
+        & \max_{\lambda}  \sum_{i=1}^{n} \lambda_{i} - \frac{1}{2} \sum_{1 \leq i, j \leq n} \lambda_{i} \lambda_{j} y_{i} y_{j} x_{i}^{T} x_{j} \\
+        \text{ s.t. } & 0 \preceq \lambda \preceq \frac{1}{n \tau} \mathbf{1}
+        \end{aligned}}
+    \end{equation*}
+\end{enumerate}
+
+\section*{Optional Exercise 4 (Robust linear programming)}
+
+Sometimes, it is possible to encounter problems with some uncertainty in the constraints. One way to deal with them is to solve their worst-case scenario, and this can be achieved by using robust programming. Consider the following robust LP
+
+\begin{equation*}
+\tag{R1}
+    \begin{aligned}
+    & \min_{x} c^{T} x \\
+    \text{ s.t. } & \sup_{a \in \mathcal{P}} a^{T} x \leq b
+    \end{aligned}
+\label{pb:R1}
+\end{equation*}
+
+\noindent with variable $x \in \Rn$, where $\mathcal{P} = \set{a}{C^{T}a \preceq d}$ is a nonempty polyhedra, $C \in \R^{m \times n}, d \in \R^{m}$. The supremum represents the worst-case scenario for the constraint. Show that this problem is equivalent to the following LP.
+
+\begin{equation*}
+\tag{R2}
+    \begin{aligned}
+    & \min_{x} c^{T} x \\
+    \text{ s.t. } & d^{T}z \leq b \\
+    & C^{T}z = x \\
+    & z \succeq 0
+    \end{aligned}
+\label{pb:R2}
+\end{equation*}
+
+\noindent \textit{Hint.} Find the dual of the problem of maximizing $a^{T}x$ over $a \in \mathcal{P}$ (with variable $a$). \\
+
+\noindent \textbf{Solution.} \\
+
+\noindent Let denote (\ref{pb:R1}) the initial problem. Let $x \in \Rn$. The quantity $\sup_{a \in \mathcal{P}} a^{T} x$ in the constraint can be considered as the optimal value of a maximization problem (\ref{pb:px}) of the variable $a$ defined by:
+
+\begin{equation}
+\tag{$P_{x}$}
+    \begin{aligned}
+    & \max_{a \in \Rn} a^{T} x \\
+    \text{ s.t. } & C^{T} a \preceq d
+    \end{aligned}
+\label{pb:px}
+\end{equation}
+
+\noindent Note that the supremum is reached because the points $x$ that are considered are such that the convex problem (\ref{pb:px}) is bounded. This problem is equivalent to
+
+\begin{equation*}
+    \begin{aligned}
+    & \min_{a \in \Rn} \left( -x \right)^{T} a \\
+    \text{ s.t. } & C^{T} a \preceq d
+    \end{aligned}
+\end{equation*}
+
+\noindent which is an LP problem. For $a \in \Rn, z \in \R^{m}$, the Lagrangian is given by
+
+\begin{equation*}
+    \begin{aligned}
+    \mathcal{L} \left( a, z \right) &= \left( -x \right)^{T} a + z^{T} \left( C^{T} a - d \right) \\
+    &= \left( C z - x \right)^{T} a - d^{T} z
+    \end{aligned}
+\end{equation*}
+
+\noindent and the dual problem is:
+
+\begin{equation*}
+\tag{$D_{x}$}
+    \begin{aligned}
+    & \min_{z} d^{T} z \\
+    \text{ s.t. } & C z = x \\
+    & z \succeq 0
+    \end{aligned}
+\label{pb:dx}
+\end{equation*}
+
+\noindent By strong duality, the optimal value of (\ref{pb:dx}) is also reached and is equal to the optimal value of (\ref{pb:px}). Let denote by $\Delta_{x}$ the set of the feasible points of (\ref{pb:dx}). The initial problem (\ref{pb:R1}) is equivalent to:
+
+\begin{equation*}
+\tag{T}
+    \begin{aligned}
+    & \min_{x} c^{T} x \\
+    \text{ s.t. } & \inf_{z \in \Delta_{x}} d^{T} z \leq b
+    \end{aligned}
+\label{pb:tmp}
+\end{equation*}
+
+\noindent Let $F$ be the set of feasible points of this new problem (\ref{pb:tmp}). We have:
+
+\begin{equation*}
+    \begin{aligned}
+    F &= \set{x \in \Rn}{\inf_{z \in \Delta_{x}} d^{T} z \leq b} \\
+    &= \set{x \in \Rn}{ \exists z \in \Delta_{x}, \left( d^{T}z = \inf_{t \in \Delta_{x}} d^{T} t \right) \wedge \left( d^{T}z \leq b \right)} \\
+    &= \set{x \in \Rn}{\exists z \in \R^{m}, \left( d^{T}z = \inf_{t \in \Delta_{x}} d^{T} t \right) \wedge \left( d^{T}z \leq b \right) \wedge \left( C z = x \right) \wedge \left( z \succeq 0 \right)}
+    \end{aligned}
+\end{equation*}
+
+\noindent Let $x \in F$ and $z \in \R^{m}$ that satisfies the conditions. We have:
+
+\begin{equation*}
+    \begin{aligned}
+    d^{T}z = \inf_{t \in \Delta_{x}} d^{T} t &\Leftrightarrow d^{T}z = \sup_{a \in \mathcal{P}} a^{T}x &\text{ (strong duality) } \\
+    &\Leftrightarrow d^{T}z = \sup_{a \in \mathcal{P}} \left( C^{T} a \right) z &\text{ (cf $C z = x$) } \\
+    &\Leftrightarrow d^{T}z = d^{T}z &\text{ (cf $a \in \mathcal{P}$ and $z \succeq 0$) }
+    \end{aligned}
+\end{equation*}
+
+\noindent The last assertion is always true. Hence, we can write:
+
+\begin{equation*}
+    F = \set{x \in \Rn}{\exists z \in \R^{m}, \left( d^{T}z \leq b \right) \wedge \left( C z = x \right) \wedge \left( z \succeq 0 \right)}
+\end{equation*}
+
+\noindent We have just shown that (\ref{pb:tmp}) is equivalent to:
+
+\begin{equation*}
+    \begin{aligned}
+    & \min_{x} c^{T} x \\
+    \text{ s.t. } & d^{T}z \leq b \\
+    & C^{T}z = x \\
+    & z \succeq 0
+    \end{aligned}
+\end{equation*}
+
+\noindent which is exactly the problem (\ref{pb:R2}). Finally,
+\begin{center}
+    \fbox{\parbox{.25\textwidth}{(\ref{pb:R1}) is equivalent to (\ref{pb:R2})}}
+\end{center}
+
+
+\section*{Optional Exercise 5 (Boolean LP)}
+
+A \emph{Boolean LP} is an optimization problem of the form
+
+\begin{equation*}
+    \begin{aligned}
+    & \min_{x} c^{T}x \\
+    \text{ s.t. } & A x \leq b \\
+    & \forall i \in [\![ 1, n ]\!], x_{i} \in \left\{ 0, 1 \right\}
+    \end{aligned}
+\end{equation*}
+
+\noindent and is, in general, very difficult to solve. Consider the LP relaxation of this problem,
+
+\begin{equation*}
+    \begin{aligned}
+    & \min_{x} c^{T} x \\
+    \text{ s.t. } & A x \leq b \\
+    & \forall i \in [\![ 1, n ]\!], 0 \leq x_{i} \leq 1
+    \end{aligned}
+\end{equation*}
+
+\noindent which is far easier to solve, and gives a lower bound on the optimal value of the Boolean LP. In this problem we derive another lower bound for the Boolean LP, and work out the relation between the two lower bounds.
+
+\begin{enumerate}
+    \item \emph{Lagrangian relaxation}. The Boolean LP can be reformulated as the problem
+    
+    \begin{equation*}
+        \begin{aligned}
+        & \min_{x} c^{T} x \\
+        \text{ s.t. } & A x \leq b \\
+        & \forall i \in [\![ 1, n ]\!], x_{i} \left( 1 - x_{i} \right) = 0
+        \end{aligned}
+    \end{equation*}
+    
+    \noindent which has quadratic equality constraints. Find the Lagrange dual of this problem and simplify it to have only one dual variable. \textit{Hint}. You can use that
+    
+    \begin{equation*}
+        \begin{aligned}
+        \sup_{y \geq 0} \left( - \frac{\left( b + a^{T} x - y \right)^{2}}{y} \right) &= \begin{cases}
+        4 \left( b + a^{T} x \right) & b + a^{T} x \leq 0 \\
+        0 & b + a^{T} x \geq 0
+        \end{cases} \\
+        &= 4 \min \left\{ 0, b + a^{T} x \right\}
+        \end{aligned}
+    \end{equation*}
+    
+    \noindent The optimal value of the dual problem (which is convex) gives a lower bound on the optimal value of the Boolean LP. This method of finding a lower bound on the optimal value is called \emph{Lagrangian relaxation}.
+    
+    \item Show that the lower bound obtained via Lagrangian relaxation, and via the LP relaxation, are the same. \textit{Hint}. Derive the dual of the LP relaxation and simplify it.
+\end{enumerate}
+
+\noindent \textbf{Solution}.
+
+\end{document}
