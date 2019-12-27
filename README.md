@@ -15,10 +15,10 @@ Labs and homeworks done during the Master Mathematics, Vision, Learning (MVA) at
 4. [Object recognition and computer vision](https://github.com/moulinantoine/MVA/tree/master/object_recognition)
      1. [Objects Matching, Image Retrieval](https://github.com/moulinantoine/MVA/tree/master/object_recognition)
      2. [Neural Networks](https://github.com/moulinantoine/MVA/tree/master/object_recognition)
-     3. [Bird classification challenge](https://github.com/moulinantoine/MVA/tree/master/object_recognition)
+     3. [Bird Classification Challenge](https://github.com/moulinantoine/MVA/tree/master/object_recognition)
 
 5. [Probabilistic Graphical Models](https://github.com/moulinantoine/MVA/tree/master/probabilistic_graphical_models)
-     1. [Discrete graphical models, linear classification](https://github.com/moulinantoine/MVA/tree/master/probabilistic_graphical_models/HW1)
+     1. [Discrete Graphical Models, Linear Classification](https://github.com/moulinantoine/MVA/tree/master/probabilistic_graphical_models/HW1)
 
 6. [Reinforcement Learning](https://github.com/moulinantoine/MVA/tree/master/reinforcement_learning)
-     1. [Finite MDPs, function approximation](https://github.com/moulinantoine/MVA/tree/master/reinforcement_learning/HW1)
+     1. [Finite MDPs, Function Approximation](https://github.com/moulinantoine/MVA/tree/master/reinforcement_learning/HW1)
