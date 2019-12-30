@@ -117,7 +117,7 @@ class UndirectedChain:
 
         if normalize:
             for i in range(self.n_nodes-1):
-                self.forward_messages[i] /= logsumexp(self.forward_messages[i])
+                self.forward_messages[i] -= logsumexp(self.forward_messages[i])
 
         self._forward_computed = True
         return self.forward_messages
@@ -155,7 +155,7 @@ class UndirectedChain:
 
         if normalize:
             for i in range(self.n_nodes-1):
-                self.backward_messages[i] /= logsumexp(self.backward_messages[i])
+                self.backward_messages[i] -= logsumexp(self.backward_messages[i])
 
         self._backward_computed = True
         return self.backward_messages
@@ -199,7 +199,7 @@ class UndirectedChain:
             self.partition_function = logsumexp(self.marginals[j])
 
         # normalize the marginal distribution
-        self.marginals[j] = self.marginals[j] / self.partition_function
+        self.marginals[j] = self.marginals[j] - self.partition_function
 
         return self.marginals[j]
 
@@ -235,14 +235,14 @@ if __name__ == '__main__':
 
     plt.subplot(131)
     plt.title('Bernoulli')
-    plt.bar([0, 1], np.exp(u_chain.marginals[0]) / np.exp(u_chain.marginals[0]).sum())
+    plt.bar([0, 1], np.exp(u_chain.marginals[0]))
 
     plt.subplot(132)
     plt.title('Gaussian')
-    plt.bar(range_gaussian, np.exp(u_chain.marginals[1]) / np.exp(u_chain.marginals[1]).sum())
+    plt.bar(range_gaussian, np.exp(u_chain.marginals[1]))
 
     plt.subplot(133)
     plt.title('Bernoulli')
-    plt.bar([0, 1], np.exp(u_chain.marginals[2]) / np.exp(u_chain.marginals[2]).sum())
+    plt.bar([0, 1], np.exp(u_chain.marginals[2]))
 
     plt.show()

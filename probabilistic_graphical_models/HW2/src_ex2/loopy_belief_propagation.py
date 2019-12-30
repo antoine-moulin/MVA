@@ -134,14 +134,9 @@ class IsingLoopyBeliefPropagation:
         unit_vector[node] = 1
         return self.adjacency.dot(unit_vector)
 
-    def _message_initializations(self, init: str = 'unit'):
+    def _message_initializations(self):
         """
         Initialize the messages.
-
-        Parameters
-        ----------
-        init: str
-              Type of initialization. 'unit' is to initialize the messages at 1, 'random' is for uniform on [.5, 1.5).
 
         Returns
         -------
@@ -149,21 +144,21 @@ class IsingLoopyBeliefPropagation:
                   Initialized messages.
         """
 
-        if init == 'unit':  # unit initialization
-            messages = np.tile(self.adjacency, (2, 1, 1))
-            self.messages = messages.transpose(1, 2, 0)
-        else:  # random initialization
-            self.messages = np.random.rand(self.n_nodes, self.n_nodes, 2) + .5
-            self.messages[self.adjacency == 0, 0] = 0
-            self.messages[self.adjacency == 0, 1] = 0
+        messages = np.tile(self.adjacency, (2, 1, 1))
+        self.messages = messages.transpose(1, 2, 0)
 
         self.messages[self.messages != 0] = np.log(self.messages[self.messages != 0])  # log-scale
 
         return self.messages
 
-    def _message_updates(self):
+    def _message_updates(self, normalize: bool = False):
         """
         Update the messages.
+
+        Parameters
+        ----------
+        normalize: bool
+                   Boolean that indicates if the messages must be normalized or not.
 
         Returns
         -------
@@ -184,6 +179,13 @@ class IsingLoopyBeliefPropagation:
                 # ... using the formula
                 self.messages[i, j, 0] = logsumexp(node_p + edge_p[:2] + self.messages[other_neighbors, i])
                 self.messages[i, j, 1] = logsumexp(node_p + edge_p[2:] + self.messages[other_neighbors, i])
+
+                if normalize:
+                    self.messages[i, j] -= logsumexp(self.messages[i, j])
+            # if normalize:
+            #     self.messages[:, i] -= logsumexp(self.messages[:, i], axis=0)
+            # if normalize:
+            #     self.messages[i, :] -= logsumexp(self.messages[i, :], axis=0)
 
         return self.messages
 
@@ -210,7 +212,7 @@ class IsingLoopyBeliefPropagation:
                 self.edge_beliefs[i, j] = logsumexp(self.edge_potentials[i, j] + msg_to_i + msg_to_j)
                 self.edge_beliefs[i, j] /= self.edge_beliefs[i, j].sum()
 
-    def message_passing(self, n_passes: int = 10):
+    def message_passing(self, n_passes: int = 10, normalize: bool = False):
         """
         Run the loopy belief propagation algorithm. Build the grid, initialize the messages and propagate them through
         the graph.
@@ -219,13 +221,16 @@ class IsingLoopyBeliefPropagation:
         ----------
         n_passes: int
                   Number of passes for propagation.
+
+        normalize: bool
+                   Boolean that indicates if the messages must be normalized or not.
         """
 
         self._build_grid()
         self._message_initializations()
 
         for k in range(n_passes):
-            self._message_updates()
+            self._message_updates(normalize)
 
         # beliefs not used anymore
         # self._compute_beliefs()
@@ -256,7 +261,7 @@ class IsingLoopyBeliefPropagation:
         self.partition_function = logsumexp(self.marginals[j])
 
         # normalize the marginal distribution
-        self.marginals[j] = self.marginals[j] / self.partition_function
+        self.marginals[j] = self.marginals[j] - self.partition_function
 
         return self.marginals[j]
 
@@ -275,9 +280,9 @@ if __name__ == '__main__':
     for k in range(n_values):
         beta = beta_values[k]
         ising = IsingLoopyBeliefPropagation(height, width, alpha, beta)
-        ising.message_passing(n_passes)
+        ising.message_passing(n_passes, False)
         ising.compute_marginal_distribution(45)
-        log_partition_bethe[k] = ising.compute_real_partition()
+        log_partition_bethe[k] = ising.partition_function
 
     # plot the results
     plt.figure()

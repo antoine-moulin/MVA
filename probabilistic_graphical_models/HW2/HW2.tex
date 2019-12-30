@@ -156,9 +156,6 @@ Consider a mixture model, with $K$ components, where datapoints $X_i$, $i = 1, .
         \end{figure}
         
         As well, K-means creates spheres, as opposed to the ellipses obtained with Gaussian mixtures (whether with diagonal or full covariance matrices). Therefore, Gaussian mixture models work much better than a K Means algorithm on elliptical data, as seen on figure \ref{fig:custom2}.
-        
-
-        
 \end{enumerate}
 
 
@@ -199,7 +196,18 @@ To avoid over or underflow, it is often recommended to store and compute small q
         Z = \sum_{x_j} \mu_{j-1 \rightarrow j} \left( x_j \right) \psi_j \left( x_j \right) \mu_{j+1 \rightarrow j} \left( x_j \right) 
     \end{equation*}
     
-    The functions $\psi_i, \psi_{i-1, i} \geq 0$ are the \emph{potentials}. In practice, they can be stored in arrays, e.g. if $X_1$ can take $K_1$ different values and $X_2$ can take $K_2$ different values, $\psi_1, \psi_2, \psi_{1, 2}$ will be stored in three arrays with shape $\left(K_1,\right), \left(K_2,\right), \left(K_1, K_2\right)$, respectively. Note that it is the same whether the random variables are discrete or continuous because in the latter case, a discretized version is used. Besides, as indicated, the log-sum trick is used for the computations. The code is available in the file \texttt{undirected\_chain.py} where an example is shown. \\
+    The functions $\psi_i, \psi_{i-1, i} \geq 0$ are the \emph{potentials}. In practice, they can be stored in arrays, e.g. if $X_1$ can take $K_1$ different values and $X_2$ can take $K_2$ different values, $\psi_1, \psi_2, \psi_{1, 2}$ will be stored in three arrays with shape $\left(K_1,\right), \left(K_2,\right), \left(K_1, K_2\right)$, respectively. Note that it is the same whether the random variables are discrete or continuous because in the latter case, a discretized version is used. Besides, as indicated, the log-sum trick is used for the computations. Note that like multiplication operation in linear-scale becomes simple addition in log-scale; an addition operation in linear-scale becomes the log-sum-exp in the log-domain. Besides, the normalization changes. Consider a discrete probability distribution $\left( p_i \right)_i$, represented in log-scale as $\left( a_i \right)_i$ (\ie $a_i = \log p_i$):
+    
+    \begin{equation*}
+        \begin{aligned}
+        \sum_i p_i = 1 &\text{ iff } \sum_i e^{a_i} = 1 \\
+        &\text{ iff } \log \sum_i e^{a_i} = 0
+        \end{aligned}
+    \end{equation*}
+    
+    Hence, summing to one in the probability space is equivalent to have a log-sum-exp equal to $0$ in the log-probability space. To make such a normalization, one can modify $a_i$ as $a_i = a_i - LSE(a)$, where $LSE(a) = \log \sum_i e^{a_i}$.
+    
+    The code is available in the file \texttt{undirected\_chain.py} where an example is shown. \\
 \end{enumerate}
 
 The Ising model assumes $n$ binary variables $X_1, \dots, X_n$, which are jointly distributed as follows:
@@ -226,7 +234,14 @@ where the relation $i \sim j$ means that $i$ and $j$ are "neighbours". Specifica
         \begin{aligned}
         p \left( x_0, \dots, x_{n-1} \right) &= \frac{1}{Z \left( \alpha, \beta \right)} \exp \left( \alpha \sum_{k=0}^{n-1} x_k + \beta \sum_{k \sim l} \mathbb{I}_{x_k = x_l} \right) \\
         &= \frac{1}{Z \left( \alpha, \beta \right)} \left( \prod_{k=0}^{n-1} e^{\alpha x_k} \right) \left( \prod_{k \sim l} e^{\beta \mathbb{I}_{x_k = x_l}} \right) \\
-        &= \frac{1}{Z \left( \alpha, \beta \right)} \left( \prod_{i=0}^{h-1} \prod_{j=0}^{w-1} e^{\alpha v_{i, j}} \right) \left( \underbrace{\prod_{i=0}^{h-1} \prod_{j=0}^{w-2} e^{\beta \mathbb{I}_{v_{i, j} = v_{i, j+1}}}}_{\text{horizontal edges}} \underbrace{\prod_{i=0}^{h-2} \prod_{j=0}^{w-1} e^{\beta \mathbb{I}_{v_{i, j} = v_{i+1, j}}}}_{\text{vertical edges}} \right) \\
+        \end{aligned}
+    \end{equation*}
+    
+    Switching to the new representation:
+    
+    \begin{equation*}
+        \begin{aligned}
+        p \left( x_0, \dots, x_{n-1} \right) &= \frac{1}{Z \left( \alpha, \beta \right)} \left( \prod_{i=0}^{h-1} \prod_{j=0}^{w-1} e^{\alpha v_{i, j}} \right) \left( \underbrace{\prod_{i=0}^{h-1} \prod_{j=0}^{w-2} e^{\beta \mathbb{I}_{v_{i, j} = v_{i, j+1}}}}_{\text{horizontal edges}} \underbrace{\prod_{i=0}^{h-2} \prod_{j=0}^{w-1} e^{\beta \mathbb{I}_{v_{i, j} = v_{i+1, j}}}}_{\text{vertical edges}} \right) \\
         &= \frac{1}{Z \left( \alpha, \beta \right)} \prod_{i=0}^{h-1} \left( \prod_{j=0}^{w-1} e^{\alpha v_{i, j}} \prod_{j=0}^{w-2} e^{\beta \mathbb{I}_{v_{i, j} = v_{i, j+1}}} \right) \prod_{i=0}^{h-2} \left( \prod_{j=0}^{w-1} e^{\beta \mathbb{I}_{v_{i, j} = v_{i+1, j}}} \right) \\
         &= \frac{1}{Z \left( \alpha, \beta \right)} \prod_{i=0}^{h-1} \phi_{i} \left( x_{R_i} \right) \prod_{i=0}^{h-2} \phi_{i, i+1} \left( x_{R_i}, x_{R_{i+1}} \right) \\
         &\triangleq \Tilde{p} \left( x_{R_0}, \dots, x_{R_{h-1}} \right)
@@ -235,7 +250,7 @@ where the relation $i \sim j$ means that $i$ and $j$ are "neighbours". Specifica
 
     where $R_i$ is just the $i$-th, i.e. the set of nodes $\left\{ v_{i, j} \right\}_{j \in [\![ 0, w-1 ]\!]}$. Hence, it is possible to use the undirected chain formed by the super-nodes $x_{R_0}, \dots, x_{R_{h-1}}$ to compute $Z \left( \alpha, \beta \right)$. The result is shown in figure \ref{fig:log-partition}, with $\beta \in [-2, 2]$. This can be obtained by running the file \texttt{ising.py}, which contains both the class \texttt{Ising} and a small script to plot the log-partition function.
     
-    \begin{figure}
+    \begin{figure}[h]
         \centering
         \includegraphics[scale=.5]{images/log_partition_beta.png}
         \caption{Log-partition function as a function of $\beta$ and with $\alpha = 0$.}
@@ -245,10 +260,11 @@ where the relation $i \sim j$ means that $i$ and $j$ are "neighbours". Specifica
     \item Implement loopy belief propagation to obtain a faster approximation of $Z \left( \alpha, \beta \right)$. (Explain.) For which values of $\beta$ the approximation error gets larger?
     
     \textbf{Solution}. The implementation of the loopy belief propagation algorithm is available in the file \texttt{loopy\_belief\_propagation.py}. For each node, we send a message to its neighbors using the following formula and we iterate:
-    
     \begin{equation*}
         \mu_{i \rightarrow j} \left( x_j \right) = \sum_{x_i} \psi_i \left( x_i \right) \psi_{i, j} \left( x_i, x_j \right) \prod_{k \in \mathcal{N} \left( i \right) \setminus \left\{ j \right\}} \mu_{k \rightarrow i} \left( x_i \right)
     \end{equation*}
+    
+    The $j$-th marginal distribution becomes: $p \left( x_j \right) = \frac{1}{Z \left( \alpha, \beta \right)} \phi_i \left( x_i \right) \prod_{k \in \mathcal{N}(j)} \mu_{k \rightarrow j} \left( x_j \right)$.
     
     \begin{figure}[h]
         \centering
