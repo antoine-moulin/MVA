@@ -19,6 +19,7 @@ Labs and homeworks done during the Master Mathematics, Vision, Learning (MVA) at
 
 5. [Probabilistic Graphical Models](https://github.com/moulinantoine/MVA/tree/master/probabilistic_graphical_models)
      1. [Discrete Graphical Models, Linear Classification](https://github.com/moulinantoine/MVA/tree/master/probabilistic_graphical_models/HW1)
+     2. [EM Algorithm, Ising Model and Loopy Belief Propagation](https://github.com/moulinantoine/MVA/tree/master/probabilistic_graphical_models/HW2)
 
 6. [Reinforcement Learning](https://github.com/moulinantoine/MVA/tree/master/reinforcement_learning)
      1. [Finite MDPs, Function Approximation](https://github.com/moulinantoine/MVA/tree/master/reinforcement_learning/HW1)
