@@ -5,7 +5,9 @@ Labs and homeworks done during the Master Mathematics, Vision, Learning (MVA) at
      1. [Convexity, Conjugate Function](https://github.com/moulinantoine/MVA/tree/master/convex_optimization/HW1)
      2. [Duality](https://github.com/moulinantoine/MVA/tree/master/convex_optimization/HW2)
 
-2. Deep Learning (to appear)
+2. [Deep Learning](https://github.com/moulinantoine/MVA/tree/master/deep_learning)
+     1. [Natural Language Processing](https://github.com/moulinantoine/MVA/tree/master/deep_learning/nlp_project)
+     2. [Deep Q-learning](https://github.com/moulinantoine/MVA/tree/master/deep_learning/dqn_project)
 
 3. [Graphs for Machine Learning](https://github.com/moulinantoine/MVA/tree/master/graphs_ml)
      1. [Spectral Clustering](https://github.com/moulinantoine/MVA/tree/master/graphs_ml/PW1)
