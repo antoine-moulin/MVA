@@ -25,3 +25,4 @@ Labs and homeworks done during the Master Mathematics, Vision, Learning (MVA) at
 
 6. [Reinforcement Learning](https://github.com/moulinantoine/MVA/tree/master/reinforcement_learning)
      1. [Finite MDPs, Function Approximation](https://github.com/moulinantoine/MVA/tree/master/reinforcement_learning/HW1)
+     2. [Exploration in Linear Bandits and in Reinforcement Learning](https://github.com/moulinantoine/MVA/tree/master/reinforcement_learning/HW2)
