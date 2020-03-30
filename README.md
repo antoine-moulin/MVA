@@ -75,3 +75,49 @@ Labs and homeworks done during the Master Mathematics, Vision, Learning (MVA) at
 </table>
 
 ## Second semester
+
+<table>
+    <thead>
+        <tr>
+            <th>Course</th>
+            <th>Homework</th>
+        </tr>
+    </thead>
+    <tbody>
+         <!-- Kernel Methods -->
+         <tr>
+              <td rowspan=1><a href="https://github.com/moulinantoine/MVA/tree/master/">Kernel Methods</a></td>
+              <td><a href="https://github.com/moulinantoine/MVA/tree/master/"></a></td>
+         </tr>
+         <!-- Deep Learning in Practice -->
+         <tr>
+              <td rowspan=6><a href="https://github.com/moulinantoine/MVA/tree/master/">Deep Learning in Practice</a></td>
+              <td><a href="https://github.com/moulinantoine/MVA/tree/master/"></a></td>
+         </tr>
+         <tr>
+              <td><a href="https://github.com/moulinantoine/MVA/tree/master/"></a></td>
+         </tr>
+         <tr>
+              <td><a href="https://github.com/moulinantoine/MVA/tree/master/"></a></td>
+         </tr>
+         <tr>
+              <td><a href="https://github.com/moulinantoine/MVA/tree/master/"></a></td>
+         </tr>
+         <tr>
+              <td><a href="https://github.com/moulinantoine/MVA/tree/master/"></a></td>
+         </tr>
+         <tr>
+              <td><a href="https://github.com/moulinantoine/MVA/tree/master/"></a></td>
+         </tr>
+         <!-- Sequential Learning -->
+         <tr>
+              <td rowspan=1><a href="https://github.com/moulinantoine/MVA/tree/master/">Sequential Learning</a></td>
+              <td><a href="https://github.com/moulinantoine/MVA/tree/master/"></a></td>
+         </tr>
+         <!-- Multiscale models and CNNs -->
+         <tr>
+              <td rowspan=1><a href="https://github.com/moulinantoine/MVA/tree/master/">Multiscale models and CNNs</a></td>
+              <td><a href="https://github.com/moulinantoine/MVA/tree/master/object_recognition"></a></td>
+         </tr>
+    </tbody>
+</table>
