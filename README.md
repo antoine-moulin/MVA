@@ -116,8 +116,8 @@ Labs and homeworks done during the Master Mathematics, Vision, Learning (MVA) at
          </tr>
          <!-- Multiscale models and CNNs -->
          <tr>
-              <td rowspan=1><a href="https://github.com/moulinantoine/MVA/tree/master/">Multiscale models and CNNs</a></td>
-              <td><a href="https://github.com/moulinantoine/MVA/tree/master/object_recognition"></a></td>
+              <td rowspan=1><a href="https://github.com/moulinantoine/MVA/tree/master/multi_scale">Multiscale models and CNNs</a></td>
+              <td><a href="https://github.com/moulinantoine/MVA/tree/master/multi_scale">Paris Fire Brigade Challenge</a></td>
          </tr>
     </tbody>
 </table>
