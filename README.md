@@ -84,40 +84,50 @@ Labs and homeworks done during the Master Mathematics, Vision, Learning (MVA) at
         </tr>
     </thead>
     <tbody>
+         <!-- Biostatistics -->
+         <tr>
+              <td rowspan=1>Biostatistics</td>
+              <td>Treatment effect estimation, COVID-19</td>
+         </tr>
+         <!-- Deep Learning in Practice -->
+         <tr>
+              <td rowspan=6><a href="https://github.com/moulinantoine/MVA/tree/master/">Deep Learning in Practice</a></td>
+              <td>Hyperparameters tuning</td>
+         </tr>
+         <tr>
+              <td>Grad-CAM</td>
+         </tr>
+         <tr>
+              <td>Graph Neural Networks</td>
+         </tr>
+         <tr>
+              <td>Active Learning</td>
+         </tr>
+         <tr>
+              <td>Rossler Attractor</td>
+         </tr>
+         <tr>
+              <td>Generative Models</td>
+         </tr>
          <!-- Kernel Methods -->
          <tr>
               <td rowspan=1><a href="https://github.com/moulinantoine/MVA/tree/master/">Kernel Methods</a></td>
               <td><a href="https://github.com/moulinantoine/MVA/tree/master/kernel_methods">Kernels, Optimization</a></td>
          </tr>
-         <!-- Deep Learning in Practice -->
-         <tr>
-              <td rowspan=6><a href="https://github.com/moulinantoine/MVA/tree/master/">Deep Learning in Practice</a></td>
-              <td><a href="https://github.com/moulinantoine/MVA/tree/master/"></a></td>
-         </tr>
-         <tr>
-              <td><a href="https://github.com/moulinantoine/MVA/tree/master/"></a></td>
-         </tr>
-         <tr>
-              <td><a href="https://github.com/moulinantoine/MVA/tree/master/"></a></td>
-         </tr>
-         <tr>
-              <td><a href="https://github.com/moulinantoine/MVA/tree/master/"></a></td>
-         </tr>
-         <tr>
-              <td><a href="https://github.com/moulinantoine/MVA/tree/master/"></a></td>
-         </tr>
-         <tr>
-              <td><a href="https://github.com/moulinantoine/MVA/tree/master/"></a></td>
-         </tr>
-         <!-- Sequential Learning -->
-         <tr>
-              <td rowspan=1><a href="https://github.com/moulinantoine/MVA/tree/master/">Sequential Learning</a></td>
-              <td><a href="https://github.com/moulinantoine/MVA/tree/master/"></a></td>
-         </tr>
          <!-- Multiscale models and CNNs -->
          <tr>
               <td rowspan=1><a href="https://github.com/moulinantoine/MVA/tree/master/multi_scale">Multiscale models and CNNs</a></td>
               <td><a href="https://github.com/moulinantoine/MVA/tree/master/multi_scale">Paris Fire Brigade Challenge</a></td>
+         </tr>
+         <!-- Neurosciences -->
+         <tr>
+              <td rowspan=1>Neurosciences</td>
+              <td>Predictive Coding</td>
+         </tr>
+         <!-- Sequential Learning -->
+         <tr>
+              <td rowspan=1><a href="https://github.com/moulinantoine/MVA/tree/master/">Sequential Learning</a></td>
+              <td>Game Theory, Sleeping Experts</td>
          </tr>
     </tbody>
 </table>
