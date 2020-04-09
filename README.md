@@ -91,7 +91,7 @@ Labs and homeworks done during the Master Mathematics, Vision, Learning (MVA) at
          </tr>
          <!-- Deep Learning in Practice -->
          <tr>
-              <td rowspan=6><a href="https://github.com/moulinantoine/MVA/tree/master/">Deep Learning in Practice</a></td>
+              <td rowspan=6><a href="https://github.com/moulinantoine/MVA/tree/master/deep_practice">Deep Learning in Practice</a></td>
               <td>Hyperparameters tuning</td>
          </tr>
          <tr>
