@@ -1,8 +1,5 @@
-\documentclass[a4paper, 11pt]{report}
-\usepackage{../../PW_preamble}
-
-\renewcommand{\clearpage}{}
-\renewcommand{\cleardoublepage}{}
+\documentclass[a4paper, 11pt]{article}
+\usepackage{../preamble}
 
 \begin{document}
 
@@ -19,7 +16,7 @@
 
 
 
-\chapter{Graph construction}
+\section{Graph construction}
 
 
 
@@ -29,9 +26,9 @@
 
     The \texttt{gen\_pam} parameter can be used to set the distance between a blob and an outlier. More precisely, the function creates a blob and then transform the last sample into an outlier. An example with the setting \texttt{gen\_pam = 5.0} is shown in figure \ref{fig:worst-blob-case}. 
     
-    \begin{figure*}[!h]
+    \begin{figure*}[!ht]
         \centering
-        \includegraphics[scale=0.8]{images/worst_blob_case.jpg}
+        \includegraphics[width=.5\textwidth]{images/worst_blob_case.jpg}
         \caption{Output of the \texttt{worst\_blob\_case} function with \texttt{gen\_pam = 5.0}.}
         \label{fig:worst-blob-case}
     \end{figure*}
@@ -43,17 +40,17 @@
     
     In the function \texttt{how\_to\_choose\_epsilon}, in order to ensure connectivity of the graph, the value of $\epsilon$ is chosen thanks to a minimum spanning tree (MST) over the dataset, \ie, we choose $\epsilon$ as the largest distance in the MST (or equivalently, the smallest similarity). The problem is that it is not robust to outliers. Indeed, a point too far from the other points will increase the longest distance in the MST, and thus the value of $\epsilon$. This makes the thresholding useless, and the graph fully-connected (or almost). In figure \ref{fig:gen-pam-influence}, we notice that the adjacency matrix is sparse when there is no outlier, \ie, when $\texttt{gen\_pam} = 0$. But when we increase the value to $1$, it is almost fully-connected, and when $\texttt{gen\_pam} = 2$, the graph is (except for the outlier) fully-connected.
     
-    \begin{figure}[!h]
-     \begin{minipage}{0.5\textwidth}
+    \begin{figure}[!ht]
+     \begin{minipage}{0.48\textwidth}
      \begin{center}
-         \includegraphics[scale=0.65]{images/gen_pam_0.jpg}
+         \includegraphics[width=\textwidth]{images/gen_pam_0.jpg}
          \caption{$\texttt{gen\_pam} = 0$}
      \end{center}
      \end{minipage}
      \hfill
-     \begin{minipage}{0.5\textwidth}
+     \begin{minipage}{0.48\textwidth}
      \begin{center}
-         \includegraphics[scale=0.65]{images/gen_pam_2.jpg}
+         \includegraphics[width=\textwidth]{images/gen_pam_2.jpg}
          \caption{$\texttt{gen\_pam} = 2$}
      \end{center}
      \end{minipage}
@@ -71,17 +68,17 @@
     
     For the $\epsilon$ graph, as each cluster is very dense, each cluster is fully-connected (or almost), whereas different clusters are "almost not" connected. If we had different densities for each cluster, it would result in huge differences between the clusters, \ie, points inside a cluster could be tightly connected whereas points inside another cluster almost not connected. This can be solved by using the k-nn graph (not here, as explained just above).
     
-    \begin{figure}[!h]
-     \begin{minipage}{0.5\textwidth}
+    \begin{figure}[!ht]
+     \begin{minipage}{0.48\textwidth}
      \begin{center}
-         \includegraphics[scale=0.75]{images/eps_05_blobs.jpg}
+         \includegraphics[width=\textwidth]{images/eps_05_blobs.jpg}
          \caption{$\epsilon = 0.5$}
      \end{center}
      \end{minipage}
      \hfill
-     \begin{minipage}{0.5\textwidth}
+     \begin{minipage}{0.48\textwidth}
      \begin{center}
-         \includegraphics[scale=0.75]{images/knn_20_blobs.jpg}
+         \includegraphics[width=\textwidth]{images/knn_20_blobs.jpg}
          \caption{$k = 20$}
      \end{center}
      \end{minipage}
@@ -91,7 +88,7 @@
 
 
 
-\chapter{Spectral clustering}
+\section{Spectral clustering}
 
 
 
@@ -103,20 +100,20 @@
     
     Now, let compute the two blobs clustering. As we want to have a connected graph, we use here a $\epsilon$-graph, computed using a minimum spanning tree. In figure \ref{fig:two-blobs-21-eigenvectors} are shown the first and second eigenvectors of the Laplacian. We see that the first eigenvector is constant, and thus not useful for the clustering. As mentioned above, we could use the sign of each component of the second eigenvector to compute the cluster assignments. In the code, we use the $k$-means algorithm in order to be a bit more general, but those two methods lead - in this case - to the same results.
 
-    \begin{figure*}[!h]
+    \begin{figure*}[!ht]
         \centering
-        \includegraphics[scale=0.50]{images/two_blobs_21_first_eigenvector.jpg}
+        \includegraphics[width=.48\textwidth]{images/two_blobs_21_first_eigenvector.jpg}
         \hfill
-        \includegraphics[scale=0.55]{images/two_blobs_21_second_eigenvector.jpg}
+        \includegraphics[width=.48\textwidth]{images/two_blobs_21_second_eigenvector.jpg}
         \caption{First and second eigenvectors of the Laplacian.}
         \label{fig:two-blobs-21-eigenvectors}
     \end{figure*}
 
     In figure \ref{fig:question-21-results}, there are the results of the clustering assignments obtained from spectral clustering and from a $k$-means on the original data set. There is also the ground-truth in order to compare with our results. We see that the three coincide.
     
-    \begin{figure*}[!h]
+    \begin{figure*}[!ht]
         \centering
-        \includegraphics[scale=0.55]{images/question_21_results.jpg}
+        \includegraphics[width=.5\textwidth]{images/question_21_results.jpg}
         \caption{Results of spectral clustering and $k$-means on original data.}
         \label{fig:question-21-results}
     \end{figure*}
@@ -129,20 +126,20 @@
 
     Here, we compute the $k$-nn graph with $k = 20$. It has two separated components. Thus, the first eigenvector is not constant anymore (see figure \ref{fig:two-blobs-22-eigenvectors}), we can use it for computing the cluster assignments. We take the two first eigenvectors of the Laplacian, that - up to a constant - correspond to the indicator vectors of each cluster.
     
-    \begin{figure*}[!h]
+    \begin{figure*}[!ht]
         \centering
-        \includegraphics[scale=0.55]{images/two_blobs_22_first_eigenvector.jpg}
+        \includegraphics[width=0.48\textwidth]{images/two_blobs_22_first_eigenvector.jpg}
         \hfill
-        \includegraphics[scale=0.55]{images/two_blobs_22_second_eigenvector.jpg}
+        \includegraphics[width=0.48\textwidth]{images/two_blobs_22_second_eigenvector.jpg}
         \caption{First and second eigenvectors of the Laplacian.}
         \label{fig:two-blobs-22-eigenvectors}
     \end{figure*}
 
     The results are shown in figure \ref{fig:question-22-results}. As in question 2.1., the results coincide with the ground-truth.
     
-    \begin{figure*}[!h]
+    \begin{figure*}[!ht]
         \centering
-        \includegraphics[scale=0.6]{images/question_22_results.jpg}
+        \includegraphics[width=.5\textwidth]{images/question_22_results.jpg}
         \caption{Results of spectral clustering and $k$-means on original data.}
         \label{fig:question-22-results}
     \end{figure*}
@@ -163,9 +160,9 @@
 
     where $\epsilon$ is just a small number to avoid division by zero (fixed to $\epsilon = 10^{-9}$ in the code). In this particular case ($4$ blobs and small variance), the first heuristic takes the six first eigenvalues and does not cluster the data perfectly. The two latter take the four first eigenvalues and return a better clustering. See figure \ref{fig:find-the-bend}.
 
-    \begin{figure*}[!h]
+    \begin{figure*}[!ht]
         \centering
-        \includegraphics[scale=0.6]{images/find_the_bend.jpg}
+        \includegraphics[width=.5\textwidth]{images/find_the_bend.jpg}
         \caption{Eigenvalues kept by the function \texttt{choose\_eigenvalues} are below the red line in the third panel.}
         \label{fig:find-the-bend}
     \end{figure*}
@@ -178,9 +175,9 @@
 
     When the variance increases, the blobs are less separated. Thus, it becomes harder to choose the right $k$. For some data sets, we may have a very smooth spectrum without "big" eigengap, making the choice of $k$ hard. In figure \ref{fig:question-24-results} (where the parameter for the $k$-nn graph is $10$), the right $k$ has been found but if we run several times the algorithm, it is not always the case.
 
-    \begin{figure*}[!h]
+    \begin{figure*}[!ht]
         \centering
-        \includegraphics[scale=0.6]{images/question_24_results.jpg}
+        \includegraphics[width=.5\textwidth]{images/question_24_results.jpg}
         \caption{$4$ blobs with a variance of $0.2$.}
         \label{fig:question-24-results}
     \end{figure*}
@@ -203,9 +200,9 @@
 
     In figure \ref{fig:question-27-results}, we can see that the spectral clustering performs well, whereas the $k$-means algorithm fails. As $k$-means tries to find compact clusters, it cannot find clusters that are connected but not compact. But the Laplacian separates the different connected components, hence it makes such a clustering easy.
 
-    \begin{figure*}[!h]
+    \begin{figure*}[!ht]
         \centering
-        \includegraphics[scale=0.6]{images/question_27_results.jpg}
+        \includegraphics[width=.5\textwidth]{images/question_27_results.jpg}
         \caption{Two-moons data set clustering ($\epsilon = 0.8$).}
         \label{fig:question-27-results}
     \end{figure*}
@@ -214,9 +211,9 @@
     \item[2.8.] \textbf{In the function \texttt{point\_and\_circle\_clustering}, compare spectral clustering using the normal laplacian $L$ and the random-walk regularized Laplacian $L_{rw}$. Do you notice any difference? Taking into consideration the graph structure, can you explain them?}
 \end{itemize}
 
-    \begin{figure*}[!h]
+    \begin{figure*}[!ht]
         \centering
-        \includegraphics[scale=0.65]{images/question_28_results.jpg}
+        \includegraphics[width=.5\textwidth]{images/question_28_results.jpg}
         \caption{Point and circle data set clustering ($\epsilon = 0.4$).}
         \label{fig:question-28-results}
     \end{figure*}
@@ -229,17 +226,17 @@
 
     We generate the two moons data set with $500$ samples, we take the random walk normalization for the Laplacian and we use the adaptative spectral clustering to compute the clustering assignments. In figure \ref{fig:ari-eps} and \ref{fig:ari-knn}, we show the evolution of the ARI as a function of the $\epsilon$ parameter or the $k$ parameter. We see that the choice of the parameter is very important in the sense that, depending on its value, the score can be very low or very high. Besides, it seems that the graphs are a bit smooth, \ie there is not a single appropriated value but a wide range of it, \eg in order to have a high score, we can take $\epsilon \in [0.7, 0.9]$ or $k \in [\![ 5, 20 ]\!]$. In brief, the choice of the similarity graph is very important.
 
-    \begin{figure*}[!h]
+    \begin{figure*}[!ht]
     \begin{minipage}{.45\textwidth}
         \centering
-        \includegraphics[scale=0.5]{images/ari_eps.jpg}
+        \includegraphics[width=\textwidth]{images/ari_eps.jpg}
         \caption{Sensitivity to $\epsilon$ when building the $\epsilon$ graph. The plot represents the ARI as a function of $\epsilon$.}
         \label{fig:ari-eps}
     \end{minipage}
     \hfill
     \begin{minipage}{.45\textwidth}
         \centering
-        \includegraphics[scale=0.5]{images/ari_knn.jpg}
+        \includegraphics[width=\textwidth]{images/ari_knn.jpg}
         \caption{Sensitivity to $k$ when building the $k$-nn graph. The plot represents the ARI as a function of $k$.}
         \label{fig:ari-knn}
     \end{minipage}
@@ -261,18 +258,18 @@
 
     Modularity is the quantity that is to be maximized in the Louvain algorithm. In general, one should be looking for a metric that relies both on between-cluster similarity and within-cluster similarity, and not only on the between-cluster similarity.
 
-\chapter{Image Segmentation}
+\section{Image Segmentation}
 
     Here are the results obtained for the segmentation:
 
-    \begin{figure*}[!h]
+    \begin{figure*}[!ht]
         \centering
         \includegraphics[scale=0.65]{images/four_elements_segmentation.jpg}
         \caption{Segmentation in five classes ($k$-nn graph).}
         \label{fig:four-elements-segmentation}
     \end{figure*}
 
-    \begin{figure*}[!h]
+    \begin{figure*}[!ht]
         \centering
         \includegraphics[scale=0.65]{images/fruit_salad_segmentation.jpg}
         \caption{Segmentation in four classes ($k$-nn graph).}
@@ -294,7 +291,7 @@
     
     Another idea would be to generate super-pixels using methods such as SLIC and to create the graph from these super-pixels. In figure \ref{fig:super-pixels} is shown an example of super-pixels.
     
-    \begin{figure*}[!h]
+    \begin{figure*}[!ht]
         \centering
         \includegraphics[scale=0.65]{images/super_pixels.jpg}
         \caption{Example of super-pixels.}

@@ -1,22 +1,6 @@
-% \documentclass{article}
-\documentclass[a4paper, 11pt]{report}
-% \usepackage{graphicx}
-% \usepackage{hyperref}
-% \usepackage{algorithm,algorithmic,caption} % lecture 5
-% \usepackage{amsmath}
-% \usepackage[T1]{fontenc}
-% \usepackage{amsfonts}
-% \usepackage{enumitem}
-% \usepackage{natbib}
-% \usepackage{listings}
-% \setenumerate[1]{label=\thesection.\arabic*.}
-% \usepackage{datetime}
-\usepackage[hmargin=2cm, vmargin=2.1cm]{geometry}
-\usepackage{../../PW_preamble}
-\DeclareMathOperator{\softmax}{softmax}
+\documentclass[a4paper, 11pt]{article}
 
-\renewcommand{\clearpage}{}
-\renewcommand{\cleardoublepage}{}
+\usepackage{../preamble}
 
 \renewenvironment{abstract}{
 \vspace{.5cm}
@@ -24,11 +8,6 @@
 \textbf{Abstract} \\
 \vspace{.1cm}
 }{\end{center}}
-
-\setlength{\parindent}{0pt}
-
-% \setlength{\parskip}{0.5\baselineskip}%
-% \setlength\parindent{0pt}
 
 \begin{document}
 
@@ -41,17 +20,13 @@
 \worknumber{3}
 \workdate{December 6}
 
-% 	\title{TP3: Graph Neural Networks}
-% 	\author{omar (dot) darwiche-domingues (at) inria.fr \\
-% 			pierre (dot) perrault (at) inria.fr}
-% 	\date{December 6, 2019}
 \maketitle
 
 \begin{abstract}
 	The report and the code are due in 2 weeks (deadline 23:59, 20/12/2019). You will find instructions on how to submit the report on piazza, as well as the policies for scoring and late submissions.
 \end{abstract}
 
-\chapter{Neural Relational Inference}
+\section{Neural Relational Inference}
 
 This practical session is based on the paper \href{https://arxiv.org/pdf/1802.04687.pdf}{\emph{Neural Relational Inference for Interacting Systems}} by Kipf et al., 2018.
 
@@ -83,7 +58,7 @@ The Neural Relational Inference (NRI) model consists of:
 Both the encoder and the decoder are implemented using graph neural networks. For more details, read Section 3 of the paper \href{https://arxiv.org/pdf/1802.04687.pdf}{here}. \\
 
 
-\chapter{Questions}
+\section{Questions}
 
 Complete the code in the following notebook
 
@@ -156,7 +131,6 @@ and answer the questions below in your report. \textbf{For the report, no code s
 	\item \textbf{What do you expect to happen with the NRI model when there is no interaction between the objects?}
 	
 	When there is no interaction between the objects, we could expect the NRI model to fail. Indeed, if the objects are independent, the bias induced by the graph structure (which supposes that, somehow, the objects are in relation) could possibly create mistakes.
-	
 \end{enumerate}
 
 \end{document}
