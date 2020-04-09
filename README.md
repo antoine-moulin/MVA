@@ -86,8 +86,8 @@ Labs and homeworks done during the Master Mathematics, Vision, Learning (MVA) at
     <tbody>
          <!-- Biostatistics -->
          <tr>
-              <td rowspan=1>Biostatistics</td>
-              <td>Treatment effect estimation, COVID-19</td>
+              <td rowspan=1><a href="https://github.com/moulinantoine/MVA/tree/master/biostatistics">Biostatistics</a></td>
+              <td><a href="https://github.com/moulinantoine/MVA/tree/master/biostatistics">Treatment effect estimation, COVID-19</a></td>
          </tr>
          <!-- Deep Learning in Practice -->
          <tr>
