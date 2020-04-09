@@ -61,7 +61,7 @@ Labs and homeworks done during the Master Mathematics, Vision, Learning (MVA) at
               <td><a href="https://github.com/moulinantoine/MVA/tree/master/probabilistic_graphical_models/HW2">EM Algorithm, Ising Model and Loopy Belief Propagation</a></td>
          </tr>
          <tr>
-              <td><a href="https://github.com/moulinantoine/MVA/tree/master/probabilistic_graphical_models/">Gibbs Sampling, Mean Field VB</a></td>
+              <td><a href="https://github.com/moulinantoine/MVA/tree/master/probabilistic_graphical_models/HW3">Gibbs Sampling, Mean Field VB</a></td>
          </tr>
          <!-- Reinforcement Learning -->
          <tr>
