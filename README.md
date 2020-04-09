@@ -20,7 +20,7 @@ Labs and homeworks done during the Master Mathematics, Vision, Learning (MVA) at
               <td><a href="https://github.com/moulinantoine/MVA/tree/master/convex_optimization/HW2">Duality</a></td>
          </tr>
          <tr>
-              <td><a href="https://github.com/moulinantoine/MVA/tree/master/convex_optimization/">LASSO</a></td>
+              <td><a href="https://github.com/moulinantoine/MVA/tree/master/convex_optimization/HW3">LASSO</a></td>
          </tr>
          <!-- Deep Learning -->
          <tr>
