@@ -1,0 +1,174 @@
+% -----------------------*- LaTeX-*-----------------------
+%   PREAMBLE_HW.STY -- Make homework reports
+%
+%   Antoine Moulin, 2019; the title format, in the section `Title, head, foot` below, has been taken from Francis Bach
+%
+%   Francis Bach, 2007; shamelessly taken from Laurent El Ghaoui
+%
+%   Martin Wainwright;  August, 2004
+%
+%   Modified from a version by Jeff Erickson (jeffe@cs.uiuc.edu), July 29, 1998
+%
+%   Loosely based on the MIT/Berkeley scribe notes macros, but
+%   written from scratch.
+%
+% -------------------------------------------------------
+
+
+% -------------------------------------------------------
+% Packages
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{amsthm, thmtools}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\usepackage{mathtools}
+\usepackage{algorithm,algorithmic,caption}
+\usepackage{stmaryrd}
+\usepackage{dsfont}
+\usepackage[all]{xy}
+\usepackage{enumitem}
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{multicol}
+\usepackage{nameref, hyperref, cleveref}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{titling}
+\usepackage{tikz}
+\usepackage{tabularx}
+\usepackage{enumitem}
+
+% -------------------------------------------------------
+% Title, head, foot
+
+\titleformat{\chapter}
+  {\normalfont\LARGE\bfseries}{\thechapter}{1em}{}
+\titlespacing*{\chapter}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
+
+\def\course#1{\def\@course{#1}}
+\course{ }
+
+\def\doctype#1{\def\@doctype{#1}}
+\def\coursetitle#1{\def\@coursetitle{#1}}
+\def\semester#1{\def\@semester{#1}}
+\def\instructor#1{\def\@instructor{#1}}
+\def\student#1{\def\@student{#1}}
+\def\worknumber#1{\def\@worknumber{#1}}
+\def\workdate#1{\def\@workdate{#1}}
+
+\def\xxx{\vphantom{()}}
+\def\maketitle
+{
+\def\@oddhead{\underline{\hbox to\textwidth{\textbf{%
+	\rlap{\@course\phantom{()}}\hfil
+	\@doctype~\@worknumber~--- \@workdate
+	\hfil\llap{\@semester}}}}}
+\def\@oddfoot{\hfil\thepage\hfil}
+\def\ps@myfirst{\ps@plain\def\@oddfoot{\hfil\thepage\hfil}}
+\thispagestyle{myfirst}
+\noindent
+\framebox[\textwidth]{\vbox to 0.75in{
+\hbox to\textwidth{~\textbf{\rlap{\@course\@coursetitle\xxx}
+	\hfil\llap{\@semester\,}}~}
+\vss
+\hbox to \textwidth{\Large\hfill \@doctype~\@worknumber~--- \@workdate\hfill}
+\vss
+\hbox to \textwidth{~\textsl{\rlap{ Instructor: \@instructor\xxx}
+	\hfill\llap{Student: \@student\,}}~}
+}}
+\bigskip
+\vspace*{1cm}
+}
+
+\author{}
+\date{}
+
+% -------------------------------------------------------
+
+
+\hypersetup{
+	pdfnewwindow=false,
+	colorlinks=true,
+	linkcolor=black,
+	filecolor=black,
+	urlcolor=blue,
+	}
+
+\setlength{\columnseprule}{0.1pt}
+\setlength{\parindent}{0pt}
+
+\allowdisplaybreaks
+\jot=0pt
+
+
+% -------------------------------------------------------
+% Sets
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Rd}{\mathbb{R}^{d}}
+\newcommand{\Rn}{\mathbb{R}^{n}}
+\newcommand{\Rp}{\mathbb{R}^{p}}
+\newcommand{\Rq}{\mathbb{R}^{q}}
+
+\newcommand{\X}{\mathcal{X}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\cM}{\mathcal{M}}
+\newcommand{\cA}{\mathcal{A}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\cR}{\mathcal{R}}
+\newcommand{\cS}{\mathcal{S}}
+
+
+\newcommand{\mipi}{[- \infty, + \infty]}
+
+\renewcommand{\L}{L^{1}(\R)}
+\newcommand{\Ld}{L^{2}(\R)}
+\newcommand{\Lp}{L^{p}(\R)}
+\newcommand{\Linf}{L^{\infty}(\R)}
+
+\newcommand{\La}{L^{1}}
+\newcommand{\Lda}{L^{2}}
+\newcommand{\Lpa}{L^{p}}
+\newcommand{\Linfa}{L^{\infty}}
+
+\renewcommand{\l}{\ell^{1}(\Z)}
+\newcommand{\ld}{\ell^{2}(\Z)}
+\newcommand{\linf}{\ell^{\infty}(\Z)}
+
+
+% -------------------------------------------------------
+% Notations
+\newcommand{\tf}[1]{\mathcal{F}\left(#1\right)}
+\newcommand{\tfi}[1]{\overline{\mathcal{F}}\left(#1\right)}
+
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\E}{\mathbb{E}}
+
+\newcommand{\ps}[2]{#1 \overset{p.s.}{\longrightarrow} #2}
+\newcommand{\prob}[2]{#1 \overset{\P}{\longrightarrow} #2}
+\newcommand{\lp}[2]{#1 \overset{\Lp}{\longrightarrow} #2}
+\newcommand{\law}[2]{#1 \Longrightarrow #2}
+\newcommand{\distr}[2]{#1 \overset{d}{\longrightarrow} #2}
+
+\newcommand{\norm}[2]{\left|\left| #1 \right|\right|_{#2}}
+\newcommand{\set}[2]{\left\{ #1 \mid #2\right\}}
+\newcommand{\rotvert}{\rotatebox[origin=c]{90}{$\vert$}}
+
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\epi}{epi}
+\DeclareMathOperator{\relint}{relint}
+\DeclareMathOperator{\prox}{prox}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\Diag}{Diag}
+\DeclareMathOperator{\Ker}{Ker}
+\DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\Hessian}{Hess}
+
+\newcommand{\ie}{\textit{i.e.\,}}
+\newcommand{\eg}{\textit{e.g.\,}}
+\renewcommand{\emph}[1]{\textbf{\textit{#1}}}

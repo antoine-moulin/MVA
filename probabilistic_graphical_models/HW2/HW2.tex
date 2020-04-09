@@ -1,15 +1,5 @@
-\documentclass[a4paper, 11pt]{report}
-\usepackage{../../preamble}
-\usepackage{ amssymb }
-\usepackage{tabularx}
-\DeclareMathOperator{\Hessian}{Hess}
-\usepackage{graphicx}
-
-\newcommand{\rotvert}{\rotatebox[origin=c]{90}{$\vert$}}
-
-\renewcommand{\clearpage}{}
-\renewcommand{\cleardoublepage}{}
-\setlength{\parindent}{0pt}
+\documentclass[a4paper, 11pt]{article}
+\usepackage{../preamble}
 
 \begin{document}
 
@@ -23,7 +13,7 @@
 
 \maketitle
 
-\chapter{Classification: K-means, and the EM algorithm}
+\section{Classification: K-means, and the EM algorithm}
 
 
 Consider a mixture model, with $K$ components, where datapoints $X_i$, $i = 1, . . . , n$ have a probability $p_k$ to be in component $k$: $P(Z_i = k) = p_k$, and, conditional on $Z_i = k$, $X_i \sim \mathcal{N}(\mu_k,D_k)$, a multivariate Gaussian distribution with mean $\mu_k$, and diagonal (not full) covariance matrix $D_k$.
@@ -41,13 +31,13 @@ Consider a mixture model, with $K$ components, where datapoints $X_i$, $i = 1, .
             \ell_t &= \sum_{i=1}^{n} \sum_{j=1}^{K} z_i^j \log p_j + \sum_{i=1}^{n} \sum_{j=1}^{K} z_i^j \log \mathcal{N}(X_i | \mu_{j,t}, D_{j,t})\\
         \end{align*}
     
-    with $z_i^j =& \left\{
+    with $z_i^j = \left\{
                         \begin{array}{ll}
                             1 \mbox{ if } z_i = j \\
                             0 \mbox{ otherwise}
                         \end{array}
                     \right.$ 
-    and $\mathcal{N}(X_i | \mu, D) = \frac{1}{(2 \pi)^{\frac{d}{2}}|D|^{\frac{1}{2}}} \exp{\{-\frac{1}{2}(x_i - \mu)^TD^{-1}(x_i-\mu)\}}$. \\
+    and $\mathcal{N}(X_i | \mu, D) = \frac{1}{(2 \pi)^{\frac{d}{2}}|D|^{\frac{1}{2}}} \exp{\{-\frac{1}{2}(x_i - \mu)^\top D^{-1}(x_i-\mu)\}}$. \\
     
     \textbf{During the E-step,} we will write the expectation of the complete likelihood at step $t$ with respect to the conditional distribution of $Z | X$. \\
     Since, all terms of the sum except for $z_i^j$ are constant with regards to $Z | X$, we need to compute $\mathbb{E}_{(Z |X)}(z_i^j)$.
@@ -63,7 +53,7 @@ Consider a mixture model, with $K$ components, where datapoints $X_i$, $i = 1, .
     Hence,
     \begin{align*}
         \mathbb{E}_{(Z |X)}(l_t) &= \sum_{i=1}^{n} \sum_{j=1}^{K} \tau_i^j \log p_j + \sum_{i=1}^{n} \sum_{j=1}^{K} \tau_i^j \log \mathcal{N}(X_i | \mu_{j,t}, D_{j,t}) \\
-        \mathbb{E}_{(Z |X)}(l_t) &= \sum_{i=1}^{n} \sum_{j=1}^{K} \tau_i^j \log p_j + \sum_{i=1}^{n} \sum_{j=1}^{K} \tau_i^j \left[ \log\left(\frac{1}{(2 \pi)^{\frac{d}{2}}}\right) + \log\left(\frac{1}{|D_{j,t}|^{\frac{1}{2}}}\right)-\frac{1}{2}(x_i - \mu_{j,t})^TD_{j,t}^{-1}(x_i-\mu_{j,t}) \right]\\
+        \mathbb{E}_{(Z |X)}(l_t) &= \sum_{i=1}^{n} \sum_{j=1}^{K} \tau_i^j \log p_j + \sum_{i=1}^{n} \sum_{j=1}^{K} \tau_i^j \left[ \log\left(\frac{1}{(2 \pi)^{\frac{d}{2}}}\right) + \log\left(\frac{1}{|D_{j,t}|^{\frac{1}{2}}}\right)-\frac{1}{2}(x_i - \mu_{j,t})^\top D_{j,t}^{-1}(x_i-\mu_{j,t}) \right]\\
     \end{align*}
     
     
@@ -82,19 +72,19 @@ Consider a mixture model, with $K$ components, where datapoints $X_i$, $i = 1, .
     We can now maximize the right term of the sum with regards to $\mu_t$ and $D_t$, which leaves us with:
     \begin{flalign*}
         \mu_{j,t+1} &= \frac{\sum_{i=1}^{n} \tau_i^j x_i}{\sum_{i=1}^{n} \tau_i^j} & \\
-        D_{j,t+1} &= \frac{\sum_{i=1}^{n} \tau_i^j \left(x_i - \mu_{j,t+1} \right) \left( x_i - \mu_{j,t+1} \right)^T}{\sum_{i=1}^{n} \tau_i^j} &
+        D_{j,t+1} &= \frac{\sum_{i=1}^{n} \tau_i^j \left(x_i - \mu_{j,t+1} \right) \left( x_i - \mu_{j,t+1} \right)^\top }{\sum_{i=1}^{n} \tau_i^j} &
     \end{flalign*}
     
-    We can name $w_j^t := \sum_{i=1}^{n} \tau_i^j(\theta_t)$.
+    We can name $w_j^\top  := \sum_{i=1}^{n} \tau_i^j(\theta_t)$.
     
     
     Hence, the updated expressions of the parameters at each iteration are 
 
     \begin{equation*}
         \boxed{\begin{aligned}
-        p_{j,t+1} &= \frac{1}{n} w_j^t \\
-        \mu_{j,t+1} &= \frac{1}{w_j^t} \sum_{i=1}^{n} \tau_i^j x_i \\
-        D_{j,t+1} &= \frac{1}{w_j^t} Diag(x_i - \mu_{t+1})^{2}
+        p_{j,t+1} &= \frac{1}{n} w_j^\top  \\
+        \mu_{j,t+1} &= \frac{1}{w_j^\top } \sum_{i=1}^{n} \tau_i^j x_i \\
+        D_{j,t+1} &= \frac{1}{w_j^\top } Diag(x_i - \mu_{t+1})^{2}
         \end{aligned}}
     \end{equation*}
     
@@ -162,7 +152,7 @@ Consider a mixture model, with $K$ components, where datapoints $X_i$, $i = 1, .
 
 
 \pagebreak
-\chapter{Graphs, algorithms and Ising}
+\section{Graphs, algorithms and Ising}
 
 To avoid over or underflow, it is often recommended to store and compute small quantities (such as probabilities, densities, etc.) on the \emph{log scale}. To multiply two quantities stored on the log-scale, we just add their logs. To add two such quantities, we use the log-sum trick: if $a \geq b$, compute $\log \left( e^a + e^b \right)$ as: $a + \log \left( 1 + e^{b-a} \right)$; otherwise swap $a$ and $b$.
 
@@ -187,7 +177,7 @@ To avoid over or underflow, it is often recommended to store and compute small q
     Then, for $j = 1, \dots, n$, the messages can be used to compute the marginal distribution of the node $j$:
     
     \begin{equation*}
-        p \left( x_j \right) &= \frac{1}{Z} \mu_{j-1 \rightarrow j} \left( x_j \right) \psi_j \left( x_j \right) \mu_{j+1 \rightarrow j} \left( x_j \right)
+        p \left( x_j \right) = \frac{1}{Z} \mu_{j-1 \rightarrow j} \left( x_j \right) \psi_j \left( x_j \right) \mu_{j+1 \rightarrow j} \left( x_j \right)
     \end{equation*}
     
     as well as the partition function:
@@ -250,7 +240,7 @@ where the relation $i \sim j$ means that $i$ and $j$ are "neighbours". Specifica
 
     where $R_i$ is just the $i$-th, i.e. the set of nodes $\left\{ v_{i, j} \right\}_{j \in [\![ 0, w-1 ]\!]}$. Hence, it is possible to use the undirected chain formed by the super-nodes $x_{R_0}, \dots, x_{R_{h-1}}$ to compute $Z \left( \alpha, \beta \right)$. The result is shown in figure \ref{fig:log-partition}, with $\beta \in [-2, 2]$. This can be obtained by running the file \texttt{ising.py}, which contains both the class \texttt{Ising} and a small script to plot the log-partition function.
     
-    \begin{figure}[h]
+    \begin{figure}[!ht]
         \centering
         \includegraphics[scale=.5]{images/log_partition_beta.png}
         \caption{Log-partition function as a function of $\beta$ and with $\alpha = 0$.}
@@ -266,7 +256,7 @@ where the relation $i \sim j$ means that $i$ and $j$ are "neighbours". Specifica
     
     The $j$-th marginal distribution becomes: $p \left( x_j \right) = \frac{1}{Z \left( \alpha, \beta \right)} \phi_i \left( x_i \right) \prod_{k \in \mathcal{N}(j)} \mu_{k \rightarrow j} \left( x_j \right)$.
     
-    \begin{figure}[h]
+    \begin{figure}[!ht]
         \centering
         \includegraphics[scale=.5]{images/approx_log_partition_beta.png}
         \caption{Approximation of the log-partition function as a function of $\beta$.}

@@ -1,14 +1,5 @@
-\documentclass[a4paper, 11pt]{report}
-\usepackage{../../preamble}
-\usepackage{ amssymb }
-\usepackage{tabularx}
-\DeclareMathOperator{\Hessian}{Hess}
-
-\newcommand{\rotvert}{\rotatebox[origin=c]{90}{$\vert$}}
-
-\renewcommand{\clearpage}{}
-\renewcommand{\cleardoublepage}{}
-\setlength{\parindent}{0pt}
+\documentclass[a4paper, 11pt]{article}
+\usepackage{../preamble}
 
 \begin{document}
 
@@ -22,7 +13,7 @@
 
 \maketitle
 
-\chapter{Learning in discrete graphical models}
+\section{Learning in discrete graphical models}
 
 Consider the following model: $z$ and $x$ are discrete variables taking respectively $M$ and $K$ different values with $p(z=m) = \pi_m$ and $p(x=k|z=m) = \theta_{mk}$.
 
@@ -123,11 +114,11 @@ Hence, the maximum likelihood estimators are
 \end{equation*}
 
 \pagebreak
-\chapter{Linear classification}
+\section{Linear classification}
 
 The files \texttt{trainA}, \texttt{trainB} and \texttt{trainC} contain samples of data $(x_n, y_n)$ where $x_n \in \R^2$ and $y_n \in \left\{ 0, 1 \right\}$ (each line of each file contains the $2$ components of $x_n$ then $y_n$). The goal of this exercise is to implement linear classification methods and to test them on the three data sets. The code should be written in R or Python. The source code should be handed in along with results. However, all the requested figures should be printed on paper or part of a pdf file which is turned in, with clear titles that indicate what the figures represent. Therefore, we recommend to write your code and report thanks to a Markdown file (in R or Python). The discussions may of course be handwritten.
 
-\section{Generative model (LDA)}
+\subsection{Generative model (LDA)}
 
 Given the class variable, the data are assumed to be Gaussian with different means for different classes but with the same covariance matrix.
 
@@ -157,7 +148,7 @@ Given the class variable, the data are assumed to be Gaussian with different mea
         \ell \left( \theta \right) &= p \left( \left( x_1, y_1 \right), \dots, \left( x_n, y_n \right) | \theta \right) & \\
         &= \prod_{k=1}^{n} p \left( x_k, y_k | \theta \right) \\
         &= \prod_{k=1}^{n} p \left( x_k | y_k, \theta \right) p \left( y_k | \theta \right) \\
-        &= \prod_{k=1}^{n} \left( \frac{1}{\left( 2 \Pi \right)^{d/2} \left| \Sigma \right|^{1/2}} \exp \left[ - \frac{1}{2} \left( x_k - \mu_{y_k} \right)^{T} \Sigma^{-1} \left( x_k - \mu_{y_k} \right) \right] \right) \left( \pi^{y_k} \left( 1 - \pi \right)^{1-y_k} \right)
+        &= \prod_{k=1}^{n} \left( \frac{1}{\left( 2 \Pi \right)^{d/2} \left| \Sigma \right|^{1/2}} \exp \left[ - \frac{1}{2} \left( x_k - \mu_{y_k} \right)^\top \Sigma^{-1} \left( x_k - \mu_{y_k} \right) \right] \right) \left( \pi^{y_k} \left( 1 - \pi \right)^{1-y_k} \right)
         \end{aligned}
     \end{equation*}
     \vspace*{.6em}
@@ -166,7 +157,7 @@ Given the class variable, the data are assumed to be Gaussian with different mea
     
     \begin{equation*}
         \begin{aligned}
-        L \left( \theta \right) = - \frac{nd}{2} \log 2 \Pi - \frac{n}{2} \log \left| \Sigma \right| + \sum_{k=1}^{n} \left\{ - \frac{1}{2} \left( x_k - \mu_{y_k} \right)^{T} \Sigma^{-1} \left( x_k - \mu_{y_k} \right) + y_{k} \log \left( \pi \right) + \left( 1 - y_{k} \right) \log \left( 1 - \pi \right) \right\}
+        L \left( \theta \right) = - \frac{nd}{2} \log 2 \Pi - \frac{n}{2} \log \left| \Sigma \right| + \sum_{k=1}^{n} \left\{ - \frac{1}{2} \left( x_k - \mu_{y_k} \right)^\top \Sigma^{-1} \left( x_k - \mu_{y_k} \right) + y_{k} \log \left( \pi \right) + \left( 1 - y_{k} \right) \log \left( 1 - \pi \right) \right\}
         \end{aligned}
     \end{equation*}
     
@@ -206,17 +197,17 @@ Given the class variable, the data are assumed to be Gaussian with different mea
         \end{aligned}
     \end{equation*}
     
-    Hence, the MLE estimator for $\mu_{i}$ is the empirical mean relatively to the class $i$. The gradient of $L$ with respect to $\Sigma$ is equal to the gradient of $g: \Sigma \mapsto - \frac{n}{2} \log \left| \Sigma \right| - \frac{1}{2} \sum_{k=1}^{n} \left( x_{k} - \widehat{\mu}_{y_{k}} \right)^{T} \Sigma^{-1} \left( x_{k} - \widehat{\mu}_{y_{k}} \right)$. Note that we replace the $\mu_{i}$ by their estimator $\widehat{\mu}_{i}$. As the second term is a sum of real numbers, one can write:
+    Hence, the MLE estimator for $\mu_{i}$ is the empirical mean relatively to the class $i$. The gradient of $L$ with respect to $\Sigma$ is equal to the gradient of $g: \Sigma \mapsto - \frac{n}{2} \log \left| \Sigma \right| - \frac{1}{2} \sum_{k=1}^{n} \left( x_{k} - \widehat{\mu}_{y_{k}} \right)^\top \Sigma^{-1} \left( x_{k} - \widehat{\mu}_{y_{k}} \right)$. Note that we replace the $\mu_{i}$ by their estimator $\widehat{\mu}_{i}$. As the second term is a sum of real numbers, one can write:
     
     \begin{equation*}
         \begin{aligned}
-        g \left( \Sigma \right) &= - \frac{n}{2} \log \left| \Sigma \right| - \frac{1}{2} \sum_{k=1}^{n} \Tr \left[ \left( x_{k} - \widehat{\mu}_{y_{k}} \right)^{T} \Sigma^{-1} \left( x_{k} - \widehat{\mu}_{y_{k}} \right) \right] \\
-        &= - \frac{n}{2} \log \left| \Sigma \right| - \frac{1}{2} \sum_{k=1}^{n} \Tr \left[ \Sigma^{-1} \left( x_{k} - \widehat{\mu}_{y_{k}} \right) \left( x_{k} - \widehat{\mu}_{y_{k}} \right)^{T} \right] \\
+        g \left( \Sigma \right) &= - \frac{n}{2} \log \left| \Sigma \right| - \frac{1}{2} \sum_{k=1}^{n} \Tr \left[ \left( x_{k} - \widehat{\mu}_{y_{k}} \right)^\top \Sigma^{-1} \left( x_{k} - \widehat{\mu}_{y_{k}} \right) \right] \\
+        &= - \frac{n}{2} \log \left| \Sigma \right| - \frac{1}{2} \sum_{k=1}^{n} \Tr \left[ \Sigma^{-1} \left( x_{k} - \widehat{\mu}_{y_{k}} \right) \left( x_{k} - \widehat{\mu}_{y_{k}} \right)^\top \right] \\
         &= - \frac{n}{2} \left( \log \left| \Sigma \right| + \Tr \left( \Sigma^{-1} \Tilde{\Sigma} \right) \right)
         \end{aligned}
     \end{equation*}
     
-    where $\Tilde{\Sigma} = \frac{1}{n} \sum_{k=1}^{n} \left( x_{k} - \widehat{\mu}_{y_{k}} \right) \left( x_{k} - \widehat{\mu}_{y_{k}} \right)^{T}$ is the empirical covariance matrix. 
+    where $\Tilde{\Sigma} = \frac{1}{n} \sum_{k=1}^{n} \left( x_{k} - \widehat{\mu}_{y_{k}} \right) \left( x_{k} - \widehat{\mu}_{y_{k}} \right)^\top$ is the empirical covariance matrix. 
     
     \underline{Derivative of the first term of $g$}. Let's compute the gradient of the function $X \in \cS_{++}^{n} \left( \R \right) \longmapsto \log \left| X \right|$. For $X, H \in \cS_{++}^{n} \left( \R \right)$ such that $H$ is small (e.g. its Frobenius norm is small), one has:
     
@@ -288,7 +279,7 @@ Given the class variable, the data are assumed to be Gaussian with different mea
     \begin{equation*}
         \boxed{\begin{aligned}
         \widehat{\pi} &= \frac{n_{1}}{n} \\        \widehat{\mu}_{i} &= \frac{1}{n_{i}} \sum_{k=1}^{n} x_{k} \mathds{1}_{\left\{ y_{k} = i \right\}} & \text{ for } i \in \left\{ 0, 1 \right\} \\
-        \widehat{\Sigma} &= \frac{1}{n} \sum_{k=1}^{n} \left( x_{k} - \widehat{\mu}_{y_{k}} \right) \left( x_{k} - \widehat{\mu}_{y_{k}} \right)^{T} 
+        \widehat{\Sigma} &= \frac{1}{n} \sum_{k=1}^{n} \left( x_{k} - \widehat{\mu}_{y_{k}} \right) \left( x_{k} - \widehat{\mu}_{y_{k}} \right)^\top 
         \end{aligned}}
     \end{equation*}
     
@@ -297,19 +288,19 @@ Given the class variable, the data are assumed to be Gaussian with different mea
     \begin{equation*}
         \begin{aligned}
         p \left( y = 1 | x \right) &= \frac{p \left( x | y = 1 \right) p ( y = 1 )}{p(x | y = 0) p(y = 0) + p(x | y = 1) p(y = 1)} \\
-        &= \frac{\exp \left[ - \frac{1}{2} \left( x - \mu_{1} \right)^{T} \Sigma^{-1} \left( x - \mu_{1} \right) \right] \pi}{\exp \left[ - \frac{1}{2} \left( x - \mu_{0} \right)^{T} \Sigma^{-1} \left( x - \mu_{0} \right) \right] \left( 1 - \pi \right) + \exp \left[ - \frac{1}{2} \left( x - \mu_{1} \right)^{T} \Sigma^{-1} \left( x - \mu_{1} \right) \right] \pi} \\
-        &= \frac{1}{\left( \frac{1}{\pi} - 1 \right) \exp \left[ \frac{1}{2} \left\{ \left( x - \mu_{1} \right)^{T} \Sigma^{-1} \left( x - \mu_{1} \right) - \left( x - \mu_{0} \right)^{T} \Sigma^{-1} \left( x - \mu_{0} \right) \right\} \right] + 1} \\
-        &= \frac{1}{\exp \left[ \frac{1}{2} \left\{ 2 \mu_{0}^{T} \Sigma^{-1} x - 2 \mu_{1}^{T} \Sigma^{-1} x + \mu_{1}^{T} \Sigma^{-1} \mu_{1} - \mu_{0}^{T} \Sigma^{-1} \mu_{0} \right\} + \ln \left( \frac{1}{\pi} - 1 \right) \right] + 1} \\
-        &= \frac{1}{1 + \exp \left( -(w^{T}x + b) \right)} \\
+        &= \frac{\exp \left[ - \frac{1}{2} \left( x - \mu_{1} \right)^\top \Sigma^{-1} \left( x - \mu_{1} \right) \right] \pi}{\exp \left[ - \frac{1}{2} \left( x - \mu_{0} \right)^\top \Sigma^{-1} \left( x - \mu_{0} \right) \right] \left( 1 - \pi \right) + \exp \left[ - \frac{1}{2} \left( x - \mu_{1} \right)^\top \Sigma^{-1} \left( x - \mu_{1} \right) \right] \pi} \\
+        &= \frac{1}{\left( \frac{1}{\pi} - 1 \right) \exp \left[ \frac{1}{2} \left\{ \left( x - \mu_{1} \right)^\top \Sigma^{-1} \left( x - \mu_{1} \right) - \left( x - \mu_{0} \right)^\top \Sigma^{-1} \left( x - \mu_{0} \right) \right\} \right] + 1} \\
+        &= \frac{1}{\exp \left[ \frac{1}{2} \left\{ 2 \mu_{0}^\top \Sigma^{-1} x - 2 \mu_{1}^\top \Sigma^{-1} x + \mu_{1}^\top \Sigma^{-1} \mu_{1} - \mu_{0}^\top \Sigma^{-1} \mu_{0} \right\} + \ln \left( \frac{1}{\pi} - 1 \right) \right] + 1} \\
+        &= \frac{1}{1 + \exp \left( -(w^\top x + b) \right)} \\
         \end{aligned}
     \end{equation*}
     
-    where $w = \Sigma^{-1} \left( \mu_{1} - \mu_{0} \right)$ because $\Sigma^{-1}$ is symmetric and $b = -\frac{1}{2} \left( \mu_{1}^{T} \Sigma^{-1} \mu_{1} - \mu_{0}^{T} \Sigma^{-1} \mu_{0} \right) + \ln \left(\frac{\pi}{1-\pi}\right)$. The first line comes from the Bayes' theorem. The second line just comes from the definition of the distributions and some simplifications. Hence, denoting $\sigma$ the sigmoid function,
+    where $w = \Sigma^{-1} \left( \mu_{1} - \mu_{0} \right)$ because $\Sigma^{-1}$ is symmetric and $b = -\frac{1}{2} \left( \mu_{1}^\top \Sigma^{-1} \mu_{1} - \mu_{0}^\top \Sigma^{-1} \mu_{0} \right) + \ln \left(\frac{\pi}{1-\pi}\right)$. The first line comes from the Bayes' theorem. The second line just comes from the definition of the distributions and some simplifications. Hence, denoting $\sigma$ the sigmoid function,
     
     \begin{equation*}
         \boxed{\begin{aligned}
-        p \left( y = 1 | x \right) = \sigma \left(w^{T}x + b \right) \text{ where } & w = \Sigma^{-1} \left( \mu_{1} - \mu_{0} \right) \\
-        & b = -\frac{1}{2} \left( \mu_{1}^{T} \Sigma^{-1} \mu_{1} - \mu_{0}^{T} \Sigma^{-1} \mu_{0} \right) + \ln \left( \frac{\pi}{1-\pi} \right)
+        p \left( y = 1 | x \right) = \sigma \left(w^\top x + b \right) \text{ where } & w = \Sigma^{-1} \left( \mu_{1} - \mu_{0} \right) \\
+        & b = -\frac{1}{2} \left( \mu_{1}^\top \Sigma^{-1} \mu_{1} - \mu_{0}^\top \Sigma^{-1} \mu_{0} \right) + \ln \left( \frac{\pi}{1-\pi} \right)
         \end{aligned}}
     \end{equation*}
     
@@ -318,10 +309,10 @@ Given the class variable, the data are assumed to be Gaussian with different mea
         \begin{tabular}{ | l || *{3}{c| } }
              \hline
                 Parameter & Dataset A & Dataset B & Dataset C \\
-             \hline			
-               w_0 & 2.019 & 1.703 & 0.302 \\
-               w_1 & -6.378 & -3.043 & -2.868 \\
-               b & 31.951 & 7.886 & 20.574 \\
+             \hline
+               $w_0$ & 2.019 & 1.703 & 0.302 \\
+               $w_1$ & -6.378 & -3.043 & -2.868 \\
+               $b$ & 31.951 & 7.886 & 20.574 \\
              \hline  
          \end{tabular}
          \vspace*{.6em}
@@ -348,9 +339,9 @@ Given the class variable, the data are assumed to be Gaussian with different mea
         \end{figure*}
 \end{enumerate}
 
-\section{Logistic regression}
+\subsection{Logistic regression}
 
-Implement logistic regression for an affine function $f(x) = w^{T}x + b$ (do not forget the constant term).
+Implement logistic regression for an affine function $f(x) = w^\top x + b$ (do not forget the constant term).
 
 \begin{enumerate}[label=\alph*]
     \item Give the numerical values of the parameters learnt.
@@ -364,7 +355,7 @@ Implement logistic regression for an affine function $f(x) = w^{T}x + b$ (do not
 
 \textbf{Solution.} \\
 
-For the logistic regression, we will assume: $ y|x \sim \mathcal{B}(\theta)$, a Bernoulli law with parameter $\theta = \sigma(w^Tx) $. \\ 
+For the logistic regression, we will assume: $ y|x \sim \mathcal{B}(\theta)$, a Bernoulli law with parameter $\theta = \sigma(w^\top x) $. \\ 
 
 In this case, the offset $b$ is incorporated in the weight vector $w$ with: $
     \left\{
@@ -378,39 +369,39 @@ In this case, the offset $b$ is incorporated in the weight vector $w$ with: $
                     \end{pmatrix} \\
             X := \quad
                     \begin{pmatrix} 
-                    1 & \protect\rotvert\; x_{1}^{T} \;\protect\rotvert \\
+                    1 & \protect\rotvert\; x_{1}^\top \;\protect\rotvert \\
                     \vdots & \vdots \\
-                    1 & \protect\rotvert\; x_{n}^{T} \;\protect\rotvert
+                    1 & \protect\rotvert\; x_{n}^\top \;\protect\rotvert
                     \end{pmatrix} \\
         \end{array}
     \right.
     $ where $\left\{ \left( x_{i}, y_{i} \right) \right\}_{i \in [\![ 1, n ]\!]} \subset \R^{d} \times \left\{ 0, 1 \right\}$ are $n$ i.i.d. samples.
     
-    \\ With this in mind, we find:
+    With this in mind, we find:
     \begin{equation*}
         \begin{aligned}
         p \left( y|x \right) &= \theta^y(1-\theta)^{1-y} & \\
-        &= \sigma \left( w^Tx \right)^y \left( 1-\sigma \left( w^Tx \right) \right)^{1-y}
+        &= \sigma \left( w^\top x \right)^y \left( 1-\sigma \left( w^\top x \right) \right)^{1-y}
         \end{aligned}
     \end{equation*}
     \vspace*{.6em}
     
-    \\ As such, the log-likelihood is given by:
+    As such, the log-likelihood is given by:
     
     \begin{equation*}
         \begin{aligned}
-        L \left( w \right) &= \sum_{k=1}^{n} y_k \log \sigma(w^Tx_k) + (1-y_k)\log(1 - \sigma(w^Tx_k)) \\
-        &= \sum_{k=1}^{n} y_k \log \sigma(w^Tx_k) + (1-y_k)\log\sigma(-w^Tx_k)
+        L \left( w \right) &= \sum_{k=1}^{n} y_k \log \sigma(w^\top x_k) + (1-y_k)\log(1 - \sigma(w^\top x_k)) \\
+        &= \sum_{k=1}^{n} y_k \log \sigma(w^\top x_k) + (1-y_k)\log\sigma(-w^\top x_k)
         \end{aligned}
     \end{equation*}
     \vspace*{.6em}
     
-    We can calculate the gradient since $w \mapsto w^Tx$ is linear and $z \mapsto \log \sigma(z) = - \log(1 + e^{-z}) $ is concave:
+    We can calculate the gradient since $w \mapsto w^\top x$ is linear and $z \mapsto \log \sigma(z) = - \log(1 + e^{-z}) $ is concave:
     
     \begin{equation*}
         \begin{aligned}
-        \nabla_w L \left( w \right) &= \sum_{k=1}^{n} y_k \frac{ \nabla_w(\sigma(w^Tx_k)) }{\sigma(w^Tx_k)}  + (1-y_k)\frac{ \nabla_w(\sigma(-w^Tx_k)) }{\sigma(-w^Tx_k)} \\
-        &= \sum_{k=1}^{n} y_k x_k \frac{ \nabla_w(\sigma)(w^Tx_k) }{\sigma(w^Tx_k)}  - (1-y_k)x_k \frac{ \nabla_w(\sigma)(-w^Tx_k) }{\sigma(-w^Tx_k)} \\
+        \nabla_w L \left( w \right) &= \sum_{k=1}^{n} y_k \frac{ \nabla_w(\sigma(w^\top x_k)) }{\sigma(w^\top x_k)}  + (1-y_k)\frac{ \nabla_w(\sigma(-w^\top x_k)) }{\sigma(-w^\top x_k)} \\
+        &= \sum_{k=1}^{n} y_k x_k \frac{ \nabla_w(\sigma)(w^\top x_k) }{\sigma(w^\top x_k)}  - (1-y_k)x_k \frac{ \nabla_w(\sigma)(-w^\top x_k) }{\sigma(-w^\top x_k)} \\
         \end{aligned}
     \end{equation*}
     \vspace*{.6em}
@@ -419,18 +410,18 @@ In this case, the offset $b$ is incorporated in the weight vector $w$ with: $
     
     \begin{equation*}
         \begin{aligned}
-        \nabla_w L \left( w \right) &= \sum_{k=1}^{n} y_k x_k \frac{ \sigma(w^Tx_k)(1 - \sigma(w^Tx_k)) }{\sigma(w^Tx_k)}  - (1-y_k)x_k \frac{ \sigma(-w^Tx_k)(1-\sigma(-w^Tx_k)) }{\sigma(-w^Tx_k)} \\
-        &= \sum_{k=1}^{n} y_k x_k (1 - \sigma(w^Tx_k))  - (1-y_k)x_k \sigma(w^Tx_k) \\
-        &= \sum_{k=1}^{n} x_k \left[y_k - y_k\sigma(w^Tx_k))  - \sigma(w^Tx_k) + y_k\sigma(w^Tx_k) \right]\\
-        &= \sum_{k=1}^{n} x_k \left[y_k  - \sigma(w^Tx_k) \right]
+        \nabla_w L \left( w \right) &= \sum_{k=1}^{n} y_k x_k \frac{ \sigma(w^\top x_k)(1 - \sigma(w^\top x_k)) }{\sigma(w^\top x_k)}  - (1-y_k)x_k \frac{ \sigma(-w^\top x_k)(1-\sigma(-w^\top x_k)) }{\sigma(-w^\top x_k)} \\
+        &= \sum_{k=1}^{n} y_k x_k (1 - \sigma(w^\top x_k))  - (1-y_k)x_k \sigma(w^\top x_k) \\
+        &= \sum_{k=1}^{n} x_k \left[y_k - y_k\sigma(w^\top x_k))  - \sigma(w^\top x_k) + y_k\sigma(w^\top x_k) \right]\\
+        &= \sum_{k=1}^{n} x_k \left[y_k  - \sigma(w^\top x_k) \right]
         \end{aligned}
     \end{equation*}
     
-    The equation $ \nabla_w L \left( w \right) = 0 \iff \sum_{k=1}^{n} x_k \left[y_k  - \sigma(w^Tx_k) \right] = 0$ is nonlinear, so we can use the Newton-Raphson method to find a good root approximation. Therefore, we need to compute the Hessian. 
+    The equation $ \nabla_w L \left( w \right) = 0 \iff \sum_{k=1}^{n} x_k \left[y_k  - \sigma(w^\top x_k) \right] = 0$ is nonlinear, so we can use the Newton-Raphson method to find a good root approximation. Therefore, we need to compute the Hessian. 
     \begin{equation*}
         \begin{aligned}
-        \Hessian L \left( w \right) &= \sum_{k=1}^{n} -x_k \sigma(w^Tx_k) \sigma(-w^Tx_k)x_k^T \\
-        &= - X^T \Diag\left(\sigma(w^Tx_k) \sigma(-w^Tx_k)\right)X \\
+        \Hessian L \left( w \right) &= \sum_{k=1}^{n} -x_k \sigma(w^\top x_k) \sigma(-w^\top x_k)x_k^\top \\
+        &= - X^\top \Diag\left(\sigma(w^\top x_k) \sigma(-w^\top x_k)\right)X \\
         \end{aligned}
     \end{equation*}
     where The Newton-Raphson method then consists in updating $w$ as follows:
@@ -447,9 +438,9 @@ In this case, the offset $b$ is incorporated in the weight vector $w$ with: $
              \hline
                 Parameter & Dataset A & Dataset B & Dataset C \\
              \hline			
-               w_0 & 16.999 & 1.842 & -0.277 \\
-               w_1 & -66.605 & -3.714 & -1.914 \\
-               b & 378.214 & 13.430 & 18.807 \\
+               $w_0$ & 16.999 & 1.842 & -0.277 \\
+               $w_1$ & -66.605 & -3.714 & -1.914 \\
+               $b$ & 378.214 & 13.430 & 18.807 \\
             \hline
                Number of iterations & 200 & 11 & 9 \\
                Convergence & False & True & True \\
@@ -476,9 +467,9 @@ In this case, the offset $b$ is incorporated in the weight vector $w$ with: $
         \end{figure}
 \end{enumerate}
 
-\section{Linear regression}
+\subsection{Linear regression}
 
-Consider class $y$ as a real valued variable taking the values $0$ and $1$ only. Implement linear regression (for an affine function $f(x) = w^{T}x + b$) by solving the normal equations.
+Consider class $y$ as a real valued variable taking the values $0$ and $1$ only. Implement linear regression (for an affine function $f(x) = w^\top x + b$) by solving the normal equations.
 
 \begin{enumerate}[label=\alph*]
     \item Provide the numerical values of the learnt parameters.
@@ -495,7 +486,7 @@ Consider class $y$ as a real valued variable taking the values $0$ and $1$ only.
 Given a dataset $\left\{ \left( x_{i}, y_{i} \right) \right\}_{i \in [\![ 1, n ]\!]} \subset \R^{d} \times \left\{ 0, 1 \right\}$, a linear regression can be obtained solving an ordinary least squares (OLS) problem:
     
 \begin{equation*}
-\left( w, b \right) \in \underset{w \in \R^{d}, b \in \R}{\arg\min} \sum_{i=1}^{n} \left( y_{i} - \left( w^{T}x_{i} + b \right) \right)^{2}    
+\left( w, b \right) \in \underset{w \in \R^{d}, b \in \R}{\arg\min} \sum_{i=1}^{n} \left( y_{i} - \left( w^\top x_{i} + b \right) \right)^{2}    
 \end{equation*}
 
 Note that this is not an equality as the solution is, \textit{a priori}, not unique. \\
@@ -506,23 +497,23 @@ Using matrices, it is equivalent to solve:
     \theta \in \underset{\theta \in \R^{d+1}}{\arg\min} \norm{Y - X \theta}{2}^{2}
 \end{equation*}
     
-where $\theta = \left( b, w_{1}, \dots, w_{d} \right)^{T}$, $Y$ is the $n$-dimensional vector formed by the $y_{i}$'s, $X \in \R^{n \times (d+1)}$ the matrix defined by
+where $\theta = \left( b, w_{1}, \dots, w_{d} \right)^\top$, $Y$ is the $n$-dimensional vector formed by the $y_{i}$'s, $X \in \R^{n \times (d+1)}$ the matrix defined by
     
 \begin{equation*}
     X = \begin{pmatrix} 
-            1 & \protect\rotvert\; x_{1}^{T} \;\protect\rotvert \\
+            1 & \protect\rotvert\; x_{1}^\top \;\protect\rotvert \\
             \vdots & \vdots \\
-            1 & \protect\rotvert\; x_{n}^{T} \;\protect\rotvert
+            1 & \protect\rotvert\; x_{n}^\top \;\protect\rotvert
         \end{pmatrix}
 \end{equation*}
     
-The uniqueness of the solution depends on $\Ker \left( X \right)$ (if $\Ker \left( X \right) = \left\{ 0 \right\}$ it is unique, otherwise the set of solutions is given by $\widehat{\theta} + \Ker \left( X \right)$ where $\widehat{\theta}$ is a particular solution). Solving the so-called normal equation, $X^{T} \left( Y - \widehat{Y} \right) = 0$ where $\widehat{Y} = X \widehat{\theta}$ and $\widehat{\theta}$ is a particular solution, one can show that a solution is given by:
+The uniqueness of the solution depends on $\Ker \left( X \right)$ (if $\Ker \left( X \right) = \left\{ 0 \right\}$ it is unique, otherwise the set of solutions is given by $\widehat{\theta} + \Ker \left( X \right)$ where $\widehat{\theta}$ is a particular solution). Solving the so-called normal equation, $X^\top \left( Y - \widehat{Y} \right) = 0$ where $\widehat{Y} = X \widehat{\theta}$ and $\widehat{\theta}$ is a particular solution, one can show that a solution is given by:
     
 \begin{equation*}
-    \widehat{\theta} = \left( X^{T} X \right)^{+} X^{T} Y
+    \widehat{\theta} = \left( X^\top X \right)^{+} X^\top Y
 \end{equation*}
     
-where $\left( X^{T} X \right)^{+}$ is the Moore-Penrose inverse of $X^{T} X$ (which always exists), that corresponds to the usual inverse when $X^{T} X$ is invertible.
+where $\left( X^\top X \right)^{+}$ is the Moore-Penrose inverse of $X^\top X$ (which always exists), that corresponds to the usual inverse when $X^\top X$ is invertible.
     
 \begin{enumerate}[label=\alph*]
     \item In the following table are the numerical values of the parameters learnt for the Linear Regression model. \\
@@ -531,9 +522,9 @@ where $\left( X^{T} X \right)^{+}$ is the Moore-Penrose inverse of $X^{T} X$ (wh
              \hline
                 Parameter & Dataset A & Dataset B & Dataset C \\
              \hline			
-               w_0 & 0.056 & 0.083 & 0.017 \\
-               w_1 & -0.176 & -0.148 & -0.159 \\
-               b & 1.383 & 0.882 & 1.640 \\
+               $w_0$ & 0.056 & 0.083 & 0.017 \\
+               $w_1$ & -0.176 & -0.148 & -0.159 \\
+               $b$ & 1.383 & 0.882 & 1.640 \\
              \hline  
          \end{tabular}
     
@@ -557,7 +548,7 @@ where $\left( X^{T} X \right)^{+}$ is the Moore-Penrose inverse of $X^{T} X$ (wh
         \end{figure}
 \end{enumerate}
 
-\section{Application}
+\subsection{Application}
 
 Data in the files \texttt{testA}, \texttt{testB}, \texttt{testC} are respectively drawn from the same distribution as the data in the files \texttt{trainA}, \texttt{trainB} and \texttt{trainC}. Test the different models learnt from the corresponding training data on these test data.
 
@@ -610,7 +601,7 @@ Data in the files \texttt{testA}, \texttt{testB}, \texttt{testC} are respectivel
     \end{itemize}
 \end{enumerate}
 
-\section{QDA model}
+\subsection{QDA model}
 
 We finally relax the assumption that the covariance matrices for the two classes are the same. So, given the class label the data are assumed to be Gaussian with means and covariance matrices which are \textit{a priori} different.
 
@@ -640,7 +631,7 @@ For the QDA model, one can proceed similarly as with the LDA model. Let's highli
 \begin{equation*}
     \begin{aligned}
     L \left( \theta \right) &= - \frac{nd}{2} \log 2 \Pi - \frac{n_{0}}{2} \log \left| \Sigma_{0} \right| - \frac{n_{1}}{2} \log \left| \Sigma_{1} \right| \\
-    &\hspace*{.5cm} + \sum_{k=1}^{n} \left\{ - \frac{1}{2} \left( x_k - \mu_{y_k} \right)^{T} \Sigma^{-1}_{y_{k}} \left( x_k - \mu_{y_k} \right) + y_{k} \log \left( \pi \right) + \left( 1 - y_{k} \right) \log \left( 1 - \pi \right) \right\}
+    &\hspace*{.5cm} + \sum_{k=1}^{n} \left\{ - \frac{1}{2} \left( x_k - \mu_{y_k} \right)^\top \Sigma^{-1}_{y_{k}} \left( x_k - \mu_{y_k} \right) + y_{k} \log \left( \pi \right) + \left( 1 - y_{k} \right) \log \left( 1 - \pi \right) \right\}
     \end{aligned}
 \end{equation*}
 
@@ -656,7 +647,7 @@ For the QDA model, one can proceed similarly as with the LDA model. Let's highli
 
 which leads to the same result than previously. \\
 
-\underline{MLE for $\Sigma_{i}$, $i \in \left\{ 0, 1 \right\}$.} Let $g_{i}: \Sigma \mapsto - \frac{n_{i}}{2} \log \left| \Sigma \right| - \frac{1}{2} \sum_{k: y_{k}=i} \left( x_{k} - \widehat{\mu}_{i} \right)^{T} \Sigma^{-1} \left( x_{k} - \widehat{\mu}_{i} \right)$. The gradient of $L$ with respect to $\Sigma_{i}$ is:
+\underline{MLE for $\Sigma_{i}$, $i \in \left\{ 0, 1 \right\}$.} Let $g_{i}: \Sigma \mapsto - \frac{n_{i}}{2} \log \left| \Sigma \right| - \frac{1}{2} \sum_{k: y_{k}=i} \left( x_{k} - \widehat{\mu}_{i} \right)^\top \Sigma^{-1} \left( x_{k} - \widehat{\mu}_{i} \right)$. The gradient of $L$ with respect to $\Sigma_{i}$ is:
 
 \begin{equation*}
     \begin{aligned}
@@ -665,7 +656,7 @@ which leads to the same result than previously. \\
     \end{aligned}
 \end{equation*}
 
-where $\Tilde{\Sigma}_{i} = \frac{1}{n_{i}} \sum_{k:y_{k}=i} \left( x_{k} - \widehat{\mu}_{i} \right) \left( x_{k} - \widehat{\mu}_{i} \right)^{T}$ and we have
+where $\Tilde{\Sigma}_{i} = \frac{1}{n_{i}} \sum_{k:y_{k}=i} \left( x_{k} - \widehat{\mu}_{i} \right) \left( x_{k} - \widehat{\mu}_{i} \right)^\top$ and we have
 
 \begin{equation*}
     \begin{aligned}
@@ -680,7 +671,7 @@ Hence, the MLE estimators for the QDA model are given by:
     \boxed{\begin{aligned}
     \widehat{\pi} &= \frac{1}{n} \sum_{k=1}^{n} y_{k} \\
     \widehat{\mu}_{i} &= \frac{1}{n_{i}} \sum_{k=1}^{n} x_{k} \mathds{1}_{\left\{ y_{k} = i \right\}} & \text{ for } i \in \left\{ 0, 1 \right\} \\
-    \widehat{\Sigma}_{i} &= \frac{1}{n_{i}} \sum_{k=1}^{n} \left( x_{k} - \widehat{\mu}_{i} \right) \left( x_{k} - \widehat{\mu}_{i} \right)^{T} \mathds{1}_{\left\{ y_{k} = i \right\}} & \text{ for } i \in \left\{ 0, 1 \right\}
+    \widehat{\Sigma}_{i} &= \frac{1}{n_{i}} \sum_{k=1}^{n} \left( x_{k} - \widehat{\mu}_{i} \right) \left( x_{k} - \widehat{\mu}_{i} \right)^\top \mathds{1}_{\left\{ y_{k} = i \right\}} & \text{ for } i \in \left\{ 0, 1 \right\}
     \end{aligned}}
 \end{equation*}
 
@@ -689,16 +680,16 @@ Besides,
 \begin{equation*}
     \begin{aligned}
     p \left( y = 1 | x \right) &= \frac{p \left( x | y = 1 \right) p ( y = 1 )}{p(x | y = 0) p(y = 0) + p(x | y = 1) p(y = 1)} \\
-    &= \frac{\exp \left[ - \frac{1}{2} \left( x - \mu_{1} \right)^{T} \Sigma^{-1}_1 \left( x - \mu_{1} \right) \right] \pi}{\exp \left[ - \frac{1}{2} \left( x - \mu_{0} \right)^{T} \Sigma^{-1}_0 \left( x - \mu_{0} \right) \right] \left( 1 - \pi \right) + \exp \left[ - \frac{1}{2} \left( x - \mu_{1} \right)^{T} \Sigma^{-1}_1 \left( x - \mu_{1} \right) \right] \pi} \\
-    &= \frac{1}{\left( \frac{1}{\pi} - 1 \right) \exp \left[ \frac{1}{2} \left\{ \left( x - \mu_{1} \right)^{T} \Sigma^{-1}_1 \left( x - \mu_{1} \right) - \left( x - \mu_{0} \right)^{T} \Sigma^{-1}_0 \left( x - \mu_{0} \right) \right\} \right] + 1} \\
-    &= \frac{1}{\exp \left[ \frac{1}{2} \left\{ x^T \left(\Sigma^{-1}_1 - \Sigma^{-1}_0 \right) x + 2 \mu_{0}^{T} \Sigma^{-1}_0 x - 2 \mu_{1}^{T} \Sigma^{-1}_1 x + \mu_{1}^{T} \Sigma^{-1}_1 \mu_{1} - \mu_{0}^{T} \Sigma^{-1}_0 \mu_{0} \right\} + \ln \left( \frac{1}{\pi} - 1 \right) \right] + 1} \\
-    &= \frac{1}{\exp \left[ \frac{1}{2}  x^T \left(\Sigma^{-1}_1 - \Sigma^{-1}_0 \right) x + \left( \mu_{0}^{T} \Sigma^{-1}_0 - \mu_{1}^{T} \Sigma^{-1}_1 \right) x + \frac{1}{2} \left( \mu_{1}^{T} \Sigma^{-1}_1 \mu_{1} - \mu_{0}^{T} \Sigma^{-1}_0 \mu_{0} \right)  + \ln \left( \frac{1}{\pi} - 1 \right) \right] + 1} \\
-    &= \frac{1}{1 + \exp \left( -( - \frac{1}{2}  x^T \left(\Sigma^{-1}_1 - \Sigma^{-1}_0 \right) x + w^{T}x + b) \right)} \\
-    &= \sigma \left( - \frac{1}{2}  x^T \left(\Sigma^{-1}_1 - \Sigma^{-1}_0 \right) x + w^{T}x + b \right) \\
+    &= \frac{\exp \left[ - \frac{1}{2} \left( x - \mu_{1} \right)^\top \Sigma^{-1}_1 \left( x - \mu_{1} \right) \right] \pi}{\exp \left[ - \frac{1}{2} \left( x - \mu_{0} \right)^\top \Sigma^{-1}_0 \left( x - \mu_{0} \right) \right] \left( 1 - \pi \right) + \exp \left[ - \frac{1}{2} \left( x - \mu_{1} \right)^\top \Sigma^{-1}_1 \left( x - \mu_{1} \right) \right] \pi} \\
+    &= \frac{1}{\left( \frac{1}{\pi} - 1 \right) \exp \left[ \frac{1}{2} \left\{ \left( x - \mu_{1} \right)^\top \Sigma^{-1}_1 \left( x - \mu_{1} \right) - \left( x - \mu_{0} \right)^\top \Sigma^{-1}_0 \left( x - \mu_{0} \right) \right\} \right] + 1} \\
+    &= \frac{1}{\exp \left[ \frac{1}{2} \left\{ x^\top \left(\Sigma^{-1}_1 - \Sigma^{-1}_0 \right) x + 2 \mu_{0}^\top \Sigma^{-1}_0 x - 2 \mu_{1}^\top \Sigma^{-1}_1 x + \mu_{1}^\top \Sigma^{-1}_1 \mu_{1} - \mu_{0}^\top \Sigma^{-1}_0 \mu_{0} \right\} + \ln \left( \frac{1}{\pi} - 1 \right) \right] + 1} \\
+    &= \frac{1}{\exp \left[ \frac{1}{2}  x^\top \left(\Sigma^{-1}_1 - \Sigma^{-1}_0 \right) x + \left( \mu_{0}^\top \Sigma^{-1}_0 - \mu_{1}^\top \Sigma^{-1}_1 \right) x + \frac{1}{2} \left( \mu_{1}^\top \Sigma^{-1}_1 \mu_{1} - \mu_{0}^\top \Sigma^{-1}_0 \mu_{0} \right)  + \ln \left( \frac{1}{\pi} - 1 \right) \right] + 1} \\
+    &= \frac{1}{1 + \exp \left( -( - \frac{1}{2}  x^\top \left(\Sigma^{-1}_1 - \Sigma^{-1}_0 \right) x + w^\top x + b) \right)} \\
+    &= \sigma \left( - \frac{1}{2}  x^\top \left(\Sigma^{-1}_1 - \Sigma^{-1}_0 \right) x + w^\top x + b \right) \\
     \end{aligned}
 \end{equation*}
 
-where $w = \Sigma^{-1}_1 \mu_{1} - \Sigma^{-1}_0 \mu_{0} $ because $\Sigma^{-1}_1$ and $\Sigma^{-1}_0$ are symmetric and $b = -\frac{1}{2} \left( \mu_{1}^{T} \Sigma^{-1}_1 \mu_{1} - \mu_{0}^{T} \Sigma^{-1}_0 \mu_{0} \right) + \ln \left(\frac{\pi}{1-\pi}\right)$.
+where $w = \Sigma^{-1}_1 \mu_{1} - \Sigma^{-1}_0 \mu_{0} $ because $\Sigma^{-1}_1$ and $\Sigma^{-1}_0$ are symmetric and $b = -\frac{1}{2} \left( \mu_{1}^\top \Sigma^{-1}_1 \mu_{1} - \mu_{0}^\top \Sigma^{-1}_0 \mu_{0} \right) + \ln \left(\frac{\pi}{1-\pi}\right)$.
 
 \begin{enumerate}[label=\alph*]
     \item In the following table are the numerical values of the parameters learnt for the QDA model. \\
@@ -707,9 +698,9 @@ where $w = \Sigma^{-1}_1 \mu_{1} - \Sigma^{-1}_0 \mu_{0} $ because $\Sigma^{-1}_
              \hline
                 Parameter & Dataset A & Dataset B & Dataset C \\
              \hline			
-               w_0 & -6.069 & -8.533 & -2.898 \\
-               w_1 & -8.900 & -9.339 & -7.010 \\
-               b & 87.927 & 96.234 & 54.484 \\
+               $w_0$ & -6.069 & -8.533 & -2.898 \\
+               $w_1$ & -8.900 & -9.339 & -7.010 \\
+               $b$ & 87.927 & 96.234 & 54.484 \\
              \hline  
          \end{tabular}
     
