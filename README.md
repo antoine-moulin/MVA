@@ -121,7 +121,7 @@ Labs and homeworks done during the Master Mathematics, Vision, Learning (MVA) at
          </tr>
          <!-- Neurosciences -->
          <tr>
-              <td rowspan=1>Neurosciences</td>
+              <td rowspan=1><a href="https://github.com/moulinantoine/MVA/tree/master/neurosciences">Neurosciences</a></td>
               <td>Predictive Coding</td>
          </tr>
          <!-- Sequential Learning -->
