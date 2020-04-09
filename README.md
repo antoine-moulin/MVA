@@ -126,7 +126,7 @@ Labs and homeworks done during the Master Mathematics, Vision, Learning (MVA) at
          </tr>
          <!-- Sequential Learning -->
          <tr>
-              <td rowspan=1><a href="https://github.com/moulinantoine/MVA/tree/master/">Sequential Learning</a></td>
+              <td rowspan=1><a href="https://github.com/moulinantoine/MVA/tree/master/sequential_learning">Sequential Learning</a></td>
               <td>Game Theory, Sleeping Experts</td>
          </tr>
     </tbody>
