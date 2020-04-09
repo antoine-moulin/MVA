@@ -87,7 +87,7 @@ Labs and homeworks done during the Master Mathematics, Vision, Learning (MVA) at
          <!-- Kernel Methods -->
          <tr>
               <td rowspan=1><a href="https://github.com/moulinantoine/MVA/tree/master/">Kernel Methods</a></td>
-              <td><a href="https://github.com/moulinantoine/MVA/tree/master/"></a></td>
+              <td><a href="https://github.com/moulinantoine/MVA/tree/master/kernel_methods">Kernels, Optimization</a></td>
          </tr>
          <!-- Deep Learning in Practice -->
          <tr>
