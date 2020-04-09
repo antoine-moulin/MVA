@@ -1,0 +1,180 @@
+\documentclass[a4paper, 11pt]{report}
+\usepackage{../preamble}
+
+\newcommand{\rotvert}{\rotatebox[origin=c]{90}{$\vert$}}
+
+\begin{document}
+
+\doctype{Homework}
+\coursetitle{Convex Optimization and applications in Machine Learning}
+\semester{MVA Fall 2019}
+\instructor{Alexandre d'Aspremont}
+\student{Antoine Moulin}
+\worknumber{3}
+\workdate{November 25}
+
+\maketitle
+
+Given $x_1, \dots, x_n \in \Rd$ data vectors and $y_1, \dots, y_n \in \R$ observations, we are searching
+for regression parameters $w \in \Rd$ which fit data inputs to observations y by minimizing their squared difference. In a high dimensional setting (when $n \ll d$) a $\ell_1$ norm penalty is often used on the regression coefficients $w$ in order to enforce sparsity of the solution (so that $w$ will only have a few non-zeros entries). Such penalization has well known statistical properties, and makes the model both more interpretable, and faster at test time. From an optimization point of view we want to solve the following problem called LASSO (which stands for Least Absolute Shrinkage Operator and Selection Operator)
+
+\begin{equation*}
+    \begin{aligned}
+    \min_{w} \frac{1}{2} \norm{Xw - y}{2}^{2} + \lambda \norm{w}{1}
+    \end{aligned}
+\end{equation*}
+
+in the variable $w \in \Rd$, where $X = \left( x_1^T, \dots, x_n^T \right) \in \R^{n \times d}, y = \left( y_1, \dots y_n \right) \in \Rn$ and $\lambda > 0$ is a regularization parameter.
+
+\begin{enumerate}
+	\item Derive the dual problem of LASSO and format it as a general Quadratic Problem as follows:
+	
+	\begin{equation*}
+		\begin{aligned}
+		& \min v^{T}Qv + p^{T}v \\
+		\text{ s.t. } & Av \preceq b 
+		\end{aligned}
+	\end{equation*}
+	
+	in variable $v \in \Rn$, where $Q \succeq 0$.
+	
+	\item Implement the barrier method to solve QP.
+	
+	\begin{itemize}
+		\item[•] Write a function \texttt{v\_seq = centering\_step(Q, p, A, b, t, v0, eps)} which implements the Newton method to solve the centering step given the inputs $(Q, p, A, b)$, the barrier method parameter $t$ (see lectures), initial variables $v_0$ and a target precision $\epsilon$. The function outputs the sequence of variables iterates $\left( v_i \right)_{i = 1, \dots, n_{\epsilon}}$, where $n_{\epsilon}$ is the number of iterations to obtain the $\epsilon$ precision. Use a backtracking line search with appropriate parameters.
+		
+		\item[•] Write a function \texttt{v\_seq = barr\_method(Q, p, A, b, v0, eps)} which implements the barrier method to solve QP using precedent function given the data inputs $(Q, p, A, b)$, a feasible point $v_0$, a precision criterion $\epsilon$. The function outputs the sequence of variables iterates $\left( v_i \right)_{i =  1, \dots, n_{\epsilon}}$, where $n_{\epsilon}$ is the number of iterations to obtain the $\epsilon$ precision.
+	\end{itemize}
+	
+	\item Test your function on randomly generated matrices $X$ and observations $y$ with $\lambda = 10$. Plot precision criterion and gap $f(v_t) - f^*$ in semilog scale (using the best value found for $f$ as a surrogate for $f^*$). Repeat for different values of the barrier method parameter $\mu = 2, 15, 50, 100 \dots$ and check the impact on $w$. What would be an appropriate choice for $\mu$?
+\end{enumerate}
+
+\textbf{Solution.}
+\begin{enumerate}
+
+    \item In the previous homework, one has shown that for $u \in \Rn$,
+    
+    \begin{equation*}
+        \norm{\cdot}{1}^{*}(u) = \begin{cases}
+        0 & \text{ if } \norm{u}{\infty} \leq 1 \\
+        + \infty & \text{ otherwise }
+        \end{cases}
+    \end{equation*}
+    
+    The problem of LASSO is equivalent to
+
+    \begin{equation}
+        \begin{aligned}
+        & \min_{w}
+        \frac{1}{2} \norm{z}{2}^{2} + \lambda \norm{w}{1} \\
+        \text{ s.t. }
+        & z = Xw - y
+        \end{aligned}
+    \end{equation}
+    
+    Let $w \in \Rd, z \in \Rn, \nu \in \Rn$. The Lagrangian function of the new problem is given by
+    
+    \begin{equation*}
+        \begin{aligned}
+        \mathcal{L} \left( w, z, \nu \right) &= \frac{1}{2} \norm{z}{2}^{2} + \lambda \norm{w}{1} + \nu^{T} \left( z - Xw + y \right) \\
+        &= \frac{1}{2} \norm{z}{2}^{2} + \nu^{T} z + \lambda \norm{w}{1} - \left( X^{T} \nu \right)^{T} w + \nu^{T} y
+        \end{aligned}
+    \end{equation*}
+    
+    and the dual function is
+    
+        \begin{equation*}
+        \begin{aligned}
+        g \left( \nu \right) &= \inf_{w, z} \mathcal{L} \left( w, z, \nu \right) \\
+        &= y^{T} \nu + \inf_{z} \left( \frac{1}{2} \norm{z}{2}^{2} + \nu^{T} z \right) + \inf_{w} \left( \lambda \norm{w}{1} - \left( X^{T} \nu \right)^{T} w \right)
+        \end{aligned}
+    \end{equation*}
+    
+    The function $h: z \mapsto \frac{1}{2} \norm{z}{2}^{2} + \nu^{T} z$ is convex and differentiable. Its gradient is given by $\nabla h (z) = z + \nu$ and we have $\nabla h(z) = 0$ iff $z = - \nu$. Hence, the minimum of $h$ is $\frac{1}{2} \norm{\nu}{2}^{2} - \norm{\nu}{2}^{2} = - \frac{1}{2} \norm{\nu}{2}^{2}$.
+    
+    We can express the last term using the conjugate of $\norm{\cdot}{1}$:
+    
+    \[ \inf_{w} \lambda \norm{w}{1} - \left( X^{T} \nu \right)^{T} w = \sup_{w} \left( \frac{1}{\lambda} X^{T} \nu \right)^{T} w - \norm{w}{1} = \norm{\cdot}{1}^{*} \left( \frac{1}{\lambda} X^{T} \nu \right) \]
+    
+    Thus,
+    
+    \[ g \left( \nu \right) = y^{T} \nu - \frac{1}{2} \norm{\nu}{2}^{2} + \norm{\cdot}{1}^{*} \left( \frac{1}{\lambda} X^{T} \nu \right) \]
+    
+    $\norm{\cdot}{1}^{*}$ is the indicator function of the $\norm{\cdot}{\infty}$-unit ball. Hence, the dual problem of LASSO is
+    
+    \begin{equation*}
+        \begin{aligned}
+        & \max_{\nu} y^{T} \nu - \frac{1}{2} \norm{\nu}{2}^{2} \\
+        \text{ s.t. } & \norm{\frac{1}{\lambda} X^{T} \nu}{\infty} \leq 1
+        \end{aligned}
+    \end{equation*}
+    
+    Let's reformulate the constraint as an affine one:
+    
+    \begin{equation*}
+    	\begin{aligned}
+    	\norm{\frac{1}{\lambda} X^{T} \nu}{\infty} \leq 1 &\text{ iff } \forall i \in [\![ 1, n ]\!], -1 \leq \left[ \frac{1}{\lambda} X^{T} \nu \right]_{i} \leq 1 \\
+    	&\text{ iff } \forall i \in [\![ 1, n ]\!], \left[ \frac{1}{\lambda} X^{T} \nu \right]_{i} \leq 1 \text{ and } \left[ - \frac{1}{\lambda} X^{T} \nu \right]_{i} \leq 1 \\
+    	&\text{ iff } A \nu \preceq \lambda \mathbf{1_{2d}}
+    	\end{aligned}
+    \end{equation*}
+	
+	where $A = \left( \begin{array}{c}
+				X^{T} \\
+				- X^{T}
+			   \end{array} \right)$. Hence, multiplying the problem by $-1$, one has:
+			   
+	\begin{equation*}
+		\boxed{\begin{aligned}
+		& \min_{\nu} \nu^{T} Q \nu + p^{T} \nu & \text{ with } Q = \frac{1}{2} I_n,\, p = - y,\, b = \lambda \cdot \mathbf{1}_{2d} \\
+		\text{ s.t. } & A \nu \preceq b
+		\end{aligned}}
+	\end{equation*}
+
+	\item The goal of the centering step is to solve the unconstrained problem:
+	
+	\begin{equation*}
+	    \begin{aligned}
+	    \min_{\nu} g_{t}(\nu) \triangleq t \left( \nu^{T} Q \nu + p^{T} \nu \right) - \sum_{i=1}^{2d} \log \left( b_i - \left[ A \nu \right]_{i} \right)
+	    \end{aligned}
+	\end{equation*}
+	
+	One can write:
+	\begin{equation*}
+	A = \quad
+        \begin{pmatrix} 
+            \protect\rotvert\; a_{1}^{T} \;\protect\rotvert \\
+            \vdots \\
+            \protect\rotvert\; a_{n}^{T} \;\protect\rotvert
+        \end{pmatrix}
+    \end{equation*}
+	
+	Let's compute the gradient and the Hessian matrix of the objective function:
+	\begin{equation*}
+	    \begin{aligned}
+	    \nabla g_{t} (\nu) &= t \left( 2 Q \nu + p \right) - \sum_{i=1}^{2d} \frac{- a_i}{b_i - a_i^T \nu} \\
+	    &= t \left( 2 Q \nu + p \right) + \sum_{i=1}^{2d} \left( b_i - a_i^T \nu \right)^{-1} a_i
+	    \end{aligned}
+	\end{equation*}
+	
+	Defining $\phi = \left( \left( b_1 - a_1^T \nu \right)^{-1}, \dots, \left( b_{2d} - a_{2d}^T \nu \right)^{-1} \right)^T$, we have
+	\begin{equation*}
+	    \boxed{\nabla g_t = t \left( 2 Q \nu + p \right) + A^T \phi}
+	\end{equation*}
+	
+	Besides,
+	\begin{equation*}
+	    \nabla^2 g_{t} (\nu) = 2 t \cdot Q + \sum_{i=1}^{2d} \left( b_i - a_i^T \nu \right)^{-2} a_i a_i^T
+	\end{equation*}
+
+    and
+    \begin{equation*}
+        \boxed{\nabla^2 g_t = 2 t \cdot Q + A^T \Diag \left( \phi \right)^2 A}
+    \end{equation*}
+    
+    For the code, see \texttt{HW3.ipynb}.
+
+    \item See \texttt{HW3.ipynb}.
+\end{enumerate}
+
+\end{document}
