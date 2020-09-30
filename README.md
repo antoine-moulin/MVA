@@ -87,7 +87,7 @@ Labs and homeworks done during the Master Mathematics, Vision, Learning (MVA) at
          <!-- Biostatistics -->
          <tr>
               <td rowspan=1><a href="https://github.com/moulinantoine/MVA/tree/master/biostatistics">Biostatistics</a></td>
-              <td><a href="https://github.com/moulinantoine/MVA/tree/master/biostatistics">Treatment effect estimation, COVID-19</a></td>
+              <td><a href="https://github.com/moulinantoine/MVA/tree/master/biostatistics/biostats.pdf">Treatment effect estimation, COVID-19</a></td>
          </tr>
          <!-- Deep Learning in Practice -->
          <tr>
@@ -111,8 +111,8 @@ Labs and homeworks done during the Master Mathematics, Vision, Learning (MVA) at
          </tr>
          <!-- Kernel Methods -->
          <tr>
-              <td rowspan=1><a href="https://github.com/moulinantoine/MVA/tree/master/">Kernel Methods</a></td>
-              <td><a href="https://github.com/moulinantoine/MVA/tree/master/kernel_methods">Kernels, Optimization</a></td>
+              <td rowspan=1><a href="https://github.com/moulinantoine/MVA/tree/master/kernel_methods">Kernel Methods</a></td>
+              <td><a href="https://github.com/moulinantoine/MVA/tree/master/kernel_methods/HW.pdf">Kernels, Optimization</a></td>
          </tr>
          <!-- Multiscale models and CNNs -->
          <tr>
@@ -127,7 +127,7 @@ Labs and homeworks done during the Master Mathematics, Vision, Learning (MVA) at
          <!-- Sequential Learning -->
          <tr>
               <td rowspan=1><a href="https://github.com/moulinantoine/MVA/tree/master/sequential_learning">Sequential Learning</a></td>
-              <td>Game Theory, Sleeping Experts</td>
+              <td><a href="https://github.com/moulinantoine/MVA/tree/master/sequential_learning/report/report.pdf">Game Theory, Sleeping Experts</a></td>
          </tr>
     </tbody>
 </table>
