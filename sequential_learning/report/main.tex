@@ -1,0 +1,60 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage{preamble}
+
+\usepackage{listings}
+
+
+\newcommand{\website}{\url{http://pierre.gaillard.me/teaching/mva}}
+\newcommand{\email}{pierre.gaillard@inria.fr}
+
+\lstset{language=python,basicstyle={\ttfamily}}
+
+\usepackage{newfloat}
+\DeclareFloatingEnvironment{algo}
+\renewcommand{\algoname}{Algorithm}
+
+\DeclareFloatingEnvironment{setting}
+\renewcommand{\settingname}{Setting}
+
+\newcommand{\indic}{\mathds{1}}
+
+\makeatletter
+\newenvironment{fullwidth}
+    {\par
+     \setlength{\@totalleftmargin}{0pt}%
+     \setlength{\linewidth}{\hsize}%
+     \list{}{\setlength{\leftmargin}{0pt}}
+     \item\relax}
+    {\endlist}
+\makeatother
+
+\newenvironment{solution}{\vspace{2mm}\begin{fullwidth} \textbf{Solution:}}{\end{fullwidth}\vspace{2mm}}
+
+\begin{document}
+
+\doctype{Homework}
+\coursetitle{Sequential Learning}
+\semester{MVA 2020}
+\instructor{Pierre Gaillard}
+\student{Céline Moucer, Antoine Moulin}
+\worknumber{}
+\workdate{March 6}
+
+\maketitle
+
+This homework is due by {\bfseries Friday March 6, 2020}. It is to be returned by email to \href{mailto:\email}{\email} {\bfseries as a pdf file} (not a jupyter notebook). The code can be done in any langage (\texttt{python}, \texttt{R}, \texttt{matlab},\dots) but the results and the figures must be included into the pdf report. 
+
+\medskip
+Most questions require a proper mathematical justification or derivation (unless otherwise stated), but most questions can be answered concisely in just a few lines. No question should require lengthy or tedious derivations or calculations.
+
+
+\input{part1}
+
+\input{part2}
+
+\input{part3}
+
+\bibliographystyle{plain}
+\bibliography{biblio}
+
+\end{document}

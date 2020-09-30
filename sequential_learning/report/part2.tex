@@ -1,0 +1,196 @@
+\section*{Part 2. Theory -- Sleeping experts}
+
+The classical definition of regret compares the performance of an algorithm with the performance of the best ``constant'' action. But in some applications, some actions may be sometimes unavailable. The purpose of this exercise is to deal with this issue. 
+
+\medskip
+We consider the following full-information setting with a finite decision set $\Xcal := \{1,\dots,K\}$. At each time $t\geq 1$, a subset of active decisions $A_t \subseteq \Xcal$ is available, the other decisions are sleeping (or inactive) and cannot be chosen; the player chooses a distribution $p_t$ over active decision $A_t$ (i.e., $\sum_{j \in A_t} p_t(j) = 1$ and $p_t(k) = 0$ for $k \notin A_t$) and observes the loss $\smash{\ell_t(k) \in [0,1]}$ of all decisions in $A_t$. The sleeping regret is defined
+\begin{equation}
+	\label{eq:sleeping_regret}
+	\tag{Sleeping regret}
+	R_T(k) := \sum_{t=1}^T \big(p_t \cdot \ell_t - \ell_t(k)\big) \indic\{k \in A_t\} \,,
+\end{equation}
+with respect to decision $k \in \Xcal$, where $p_t \cdot \ell_t = \sum_{j\in A_t} p_t(j) \ell_t(j)$ is the loss of the player. 
+% The goal is to design an algorithm controlling $R_T(k)$ for all $k$.
+
+\begin{enumerate}[resume]
+	\item
+	{\bfseries The prod algorithm}
+	Here, we consider the case where all experts are active $A_t = \Xcal$ for all $t \geq 1$. Let $0\leq \eta(1),\dots,\eta(K)\leq 1/2$ be $K$ parameters. We define the weights 
+		\begin{equation}
+		    \begin{aligned}
+			p_t(k) = \frac{\eta(k) w_t(k)}{\sum_{j=1}^K \eta(j) w_t(j)} \qquad \text{where} \quad &w_t(k) = \prod_{s=1}^{t-1}\Big(1+\eta(k)\big(p_s \cdot \ell_s - \ell_s(k)\big)\Big)\quad \text{if}\  t\geq2\quad \\
+			&w_1(k) = 1\,,
+			\end{aligned}
+			\label{eq:prod}
+			\tag{$*$}
+		\end{equation}
+		
+	for all $k \in \Xcal$ and $t \geq 1$.
+	\begin{enumerate}[label=(\alph*)]
+		\item Prove that $\log(1+x) \geq x - x^2$ for $x \geq -1/2$.
+		
+        \begin{solution}
+        Let $g: x \mapsto \log \br{1 + x} - x + x^2$ defined on $\lc - \frac{1}{2}, + \infty \rp$. This function is differentiable and for $x \geq - \frac{1}{2}$:
+        \begin{equation*}
+            g'(x) = \frac{1}{1 + x} - 1 + 2x = \frac{x \br{1 + 2x}}{1 + x}
+        \end{equation*}
+        
+        $g'$ is negative for $x \in \br{- \frac{1}{2}, 0}$, null in $x \in \left\{ - \frac{1}{2}, 0 \right\}$ and positive for $x > 0$. 
+        
+        Hence, for all $x \geq - \frac{1}{2}$, $g(x) \geq g(0)$, \ie $g(x) \geq 0$. Thus,
+        \begin{equation*}
+            \boxed{\forall x \geq - \frac{1}{2},\, \log \br{1 + x} \geq x - x^2}
+        \end{equation*}
+        \end{solution}
+
+		\item Denoting $W_{t} = \sum_{k=1}^K w_t(k)$. Prove that for all $k \in \Xcal$
+		\begin{equation*}
+			\log W_{T+1} \geq \eta(k) \sum_{t=1}^T \big(p_t \cdot \ell_t - \ell_t(k)\big) - (\eta(k))^2 \sum_{t=1}^T \big(p_t \cdot \ell_t  - \ell_t(k)\big)^2
+		\end{equation*}
+
+        \begin{solution}
+        Let $k \in \Xcal$. As the weights are positive and that $\log$ is nondecreasing, we have:
+                \begin{equation*}
+                    \log W_{T+1} = \log \br{\sum_{i=1}^K w_{T+1}(i)} \geq \log \br{w_{T+1}(k)}
+                \end{equation*}
+                First, since $ 0 \leq \eta(k) \leq \frac{1}{2}$ and since the loss is positive, we have : 
+                \begin{equation*}
+                    \eta(k)\br{p_s \cdot \ell_s - \ell_s(k)} \geq - \ell_s(k)\eta(k) \geq -\eta(k) \geq -\frac{1}{2}
+                \end{equation*}
+                Besides, using the definition of the weights and the previous question :
+                \begin{equation*}
+                    \begin{aligned}
+                    \log \br{w_{T+1}(k)} &= \log \sqb{\prod_{s=1}^T \br{1 + \eta(k) \sqb{p_s \cdot \ell_s - \ell_s(k)}}} \\
+                    &= \sum_{s=1}^T \log \br{1 + \eta(k) \sqb{p_s \cdot \ell_s - \ell_s(k)}} \\
+                    &\geq \sum_{s=1}^T \br{\eta(k) \sqb{p_s \cdot \ell_s - \ell_s(k)} - \eta(k)^2 \sqb{p_s \cdot \ell_s - \ell_s(k)}^2} \\
+                    &= \eta(k) \sum_{s=1}^T \br{p_s \cdot \ell_s - \ell_s(k)} - \eta(k)^2 \sum_{s=1}^T \br{p_s \cdot \ell_s - \ell_s(k)}^2
+                    \end{aligned}
+                \end{equation*}
+                
+                Thus,
+                \begin{equation*}
+                    \boxed{\forall k \in \Xcal,\, \log W_{T+1} \geq \eta(k) \sum_{s=1}^T \br{p_s \cdot \ell_s - \ell_s(k)} - \eta(k)^2 \sum_{s=1}^T \br{p_s \cdot \ell_s - \ell_s(k)}^2}
+                \end{equation*}
+        \end{solution}
+
+		\item Show that $W_{t+1} = W_t$ for all $t\geq 1$. What is the value of $\log(W_{T+1})$?
+
+        \begin{solution}
+        Let $t \geq 1$. Using the definition of the weights, we have:
+                \begin{equation*}
+                    \begin{aligned}
+                    W_{t+1} &= \sum_{k=1}^K w_{t+1}(k) \\
+                    &= \sum_{k=1}^K w_t(k) \sqb{1 + \eta(k) \br{p_t \cdot \ell_t - \ell_t(k)}} \\
+                    &= W_t + \br{p_t \cdot \ell_t} \sum_{k=1}^K w_t(k) \eta(k) - \sum_{k=1}^K w_t(k) \eta(k) \ell_t(k)
+                    \end{aligned}
+                \end{equation*}
+                We denote $\wb_t = \br{w_t(1), \dots, w_t(K)}^\top$ and $\etab = \br{\eta(1), \dots, \eta(K)}^\top$. By definition of $p_t(k)$ for all $k$,
+                \begin{equation*}
+                    \begin{aligned}
+                    W_{t+1} &= W_t + \br{p_t \cdot \ell_t} \br{\wb_t^\top \etab} - \sum_{k=1}^K \br{\wb_t^\top \etab} p_t(k) \ell_t(k) \\
+                    &= W_t + \br{p_t \cdot \ell_t} \br{\wb_t^\top \etab} - \br{p_t \cdot \ell_t} \br{\wb_t^\top \etab} \\
+                    &= W_t
+                    \end{aligned}
+                \end{equation*}
+                
+                Hence,
+                \begin{equation*}
+                    \boxed{\forall t \geq 1,\, W_{t+1} = W_t}
+                \end{equation*}
+                
+                We can deduce $W_{T+1} = W_1 = K$ and:
+                \begin{equation*}
+                    \boxed{\log W_{T+1} = \log K}
+                \end{equation*}
+        \end{solution}
+
+		\item Assuming $\eta(k)$ are well-optimized, show the regret bound for all arms $k \in [K]$
+		\begin{equation*}
+		\sum_{t=1}^T p_t \cdot \ell_t - \ell_t(k) \leq 2 \sqrt{ (\log K) \sum_{t=1}^T  \big(p_t \cdot \ell_t - \ell_t(k)\big)^2} \,.
+		\end{equation*}
+
+        \begin{solution}
+        Let $k \in \Xcal$. Using the two previous questions,
+                \begin{equation*}
+                    \eta(k) \sum_{s=1}^T \br{p_s \cdot \ell_s - \ell_s(k)} \leq \log K + \eta(k)^2 \sum_{s=1}^T \br{p_s \cdot \ell_s - \ell_s(k)}^2
+                \end{equation*}
+                
+                We assume $\eta(k) \neq 0$:
+                \begin{equation*}
+                    \sum_{s=1}^T \br{p_s \cdot \ell_s - \ell_s(k)} \leq \frac{1}{\eta(k)} \log K + \eta(k) \sum_{s=1}^T \br{p_s \cdot \ell_s - \ell_s(k)}^2
+                \end{equation*}
+                
+                Let $\alpha \in \R$ and $g: x \mapsto \frac{1}{x} \log K + \alpha x$. $g$ is differentiable and for all $x \neq 0$ $g'(x) = \alpha - \frac{1}{x^2} \log K$. $g'$ is null in $x^* = \sqrt{\frac{\log K}{\alpha}}$, negative before and then positive, which shows this is a minimum. We have $g \br{x^*} = 2 \sqrt{\alpha \log K}$. Thus,
+                \begin{equation*}
+                    \boxed{\forall k \in \Xcal,\, \sum_{t=1}^T \br{p_t \cdot \ell_t - \ell_t(k)} \leq 2 \sqrt{\br{\log K} \sum_{t=1}^T \br{p_t \cdot \ell_t - \ell_t(k)}^2}}
+                \end{equation*}
+        \end{solution}
+    \end{enumerate}
+
+	\item {\bfseries Sleeping experts} 
+	Now, we assume that some decisions are sometimes not possible (sleeping), i.e., $A_t \subsetneq \Xcal$ for some $t\geq 1$. The idea is to use Algorithm~\eqref{eq:prod} with past modified losses
+	\begin{equation*}
+		\tilde \ell_t(k) := \left\{ \begin{array}{ll} \ell_t(k) & \text{if} \ k \in A_t \\ p_t \cdot \ell_t = \sum_{k \in A_t} p_t(k) \ell_t(k) & \text{if} \ k \notin A_t \end{array} \right.\,\,,
+	\end{equation*}
+	i.e., by assigning the loss of the algorithm $p_t \cdot \ell_t$ to all inactive decisions $k \notin A_t$.
+	The algorithm outputs weights $\tilde p_t(k)$ and $\tilde w_t(k)$ obtained by replacing $\ell_t(k)$ with $\tilde \ell_t(k)$ in Equation~\eqref{eq:prod}. This vector is then used to form another weight vector
+	\begin{equation*}
+		p_t(k) = \frac{\tilde p_t(k) \indic_{k\in A_t}}{\sum_{j=1}^K \tilde p_t(j) \indic_{j \in A_t}}
+	\end{equation*}
+	which has non zero weights only on active arms $A_t$.
+
+	\begin{enumerate}[label=(\alph*)]
+ 		\item Show that the instantaneous regret on the modified losses equals the sleeping regret on the original rewards; i.e. for all $t\geq 1$, and all $k \in \Xcal$
+		\begin{equation*}
+			 \tilde p_t \cdot \tilde \ell_t - \tilde \ell_t(k)  = \big(p_t \cdot \ell_t - \ell_t(k)\big) \indic_{k \in A_t} \,.
+		\end{equation*}
+		
+		\begin{solution}
+		Let $t \geq 1$. We first note that as $p_t$ has nonzero weights only on active arms, we have:
+        \begin{equation*}
+            p_t \cdot \ell_t = \sum_{k \in A_t} p_t(k) \ell_t(k) = \sum_{k=1}^K p_t(k) \ell_t(k) \mathds{1}_{k \in A_t} = \sum_{k=1}^K p_t(k) \ell_t(k)
+        \end{equation*}
+        
+        Let $k \in \Xcal$. By definition of $\tilde{p}_t$ and $\tilde{\ell}_t$:
+        \begin{equation*}
+            \begin{aligned}
+            \tilde{p}_t \cdot \tilde{\ell}_t &= \sum_{i=1}^K \tilde{p}_t(i) \tilde{\ell}_t(i) \\
+            &= \sum_{i=1}^K \tilde{p}_t(i) \br{\ell_t(i) \mathds{1}_{i \in A_t} + \br{p_t \cdot \ell_t} \mathds{1}_{i \in A_t^c}} \\
+            &= \sum_{i=1}^K \br{\sum_{j=1}^K \tilde{p}_t(j) \mathds{1}_{j \in A_t}} p_t(i) \ell_t(i) + \br{p_t \cdot \ell_t} \sum_{i=1}^K \tilde{p}_t(i) \mathds{1}_{i \in A_t^c} \\
+            &= \br{p_t \cdot \ell_t} \br{\sum_{j=1}^K \tilde{p}_t(j) \mathds{1}_{j \in A_t} + \sum_{i=1}^K \tilde{p}_t(i) \mathds{1}_{i \in A_t^c}} \\
+            &= p_t \cdot \ell_t
+            \end{aligned}
+        \end{equation*}
+        
+        Besides, $\tilde{\ell}_t(k) = \ell_t(k) \mathds{1}_{k \in A_t} + \br{p_t \cdot \ell_t} \mathds{1}_{k \in A_t^c}$. Thus,
+        \begin{equation*}
+            \boxed{\forall k \in \Xcal,\, \tilde{p}_t \cdot \tilde{\ell}_t - \tilde{\ell}_t(k) = \br{p_t \cdot \ell_t - \ell_t(k)} \mathds{1}_{k \in A_t}}
+        \end{equation*}
+		\end{solution}
+		
+		
+		\item Conclude that $R_T(k) \leq 2 \sqrt{(\log K)T_k}$ where $T_k = \sum_{t=1}^T \indic\{k\in A_t\}$ is the number of times arm $k$ is active.
+		
+		\begin{solution}
+	Let us recall the definition of  $\tilde \ell_t(k)$	\begin{equation*}
+		\tilde \ell_t(k) := \left\{ \begin{array}{ll} \ell_t(k) & \text{if} \ k \in A_t \\ p_t \cdot \ell_t = \sum_{k \in A_t} p_t(k) \ell_t(k) & \text{if} \ k \notin A_t \end{array} \right.\,\,,
+	\end{equation*}
+Since $l_t(k) \in [0,1]$,  $\tilde \ell_t(k) \in [0,1]$, and since $\Tilde{p}_t$ and $\Tilde{w}_t$ are constructed as in 11, we can apply the results of question 11. Besides, we have $\br{p_t \cdot \ell_t - \ell_t(k)} \leq 1$. Thus, $ \forall k \in \Xcal $ :
+\begin{equation*}
+    \begin{aligned}
+    \sum_{t=1}^T \br{\tilde{p}_t \cdot \tilde{\ell}_t - \tilde{\ell}_t(k)} &\leq 2 \sqrt{\br{\log K} \sum_{t=1}^T \br{p_t \cdot \tilde{\ell}_t - \tilde{\ell}_t(k)}^2}\\
+    & \leq 2 \sqrt{\br{\log K} \sum_{t=1}^T \br{\br{p_t \cdot \ell_t - \ell_t(k)}\mathds{1}_{k \in A_t}}^2} \\
+    & \leq 2 \sqrt{\br{\log K} \sum_{t=1}^T \mathds{1}_{k \in A_t}}\\
+    & \leq 2 \sqrt{\br{\log K}T_k}
+    \end{aligned}
+\end{equation*}
+Thus : 
+ \begin{equation*}
+                    \boxed{\forall k \in \Xcal,\, \sum_{t=1}^T \br{p_t \cdot \tilde{\ell}_t - \tilde{\ell}_t(k)} \leq 2 \sqrt{\br{\log K}T_k}}
+                \end{equation*}
+
+
+		\end{solution}
+		
+	\end{enumerate}
+\end{enumerate}

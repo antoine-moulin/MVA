@@ -1,0 +1,211 @@
+% -----------------------*- LaTeX-*-----------------------
+%
+%   Antoine Moulin, 2019; the title format, in the section `Title, head, foot` below, has been taken from Francis Bach
+%
+%   Francis Bach, 2007; shamelessly taken from Laurent El Ghaoui
+%
+%   Martin Wainwright;  August, 2004
+%
+%   Modified from a version by Jeff Erickson (jeffe@cs.uiuc.edu), July 29, 1998
+%
+%   Loosely based on the MIT/Berkeley scribe notes macros, but
+%   written from scratch.
+%
+% -------------------------------------------------------
+
+
+% -------------------------------------------------------
+% Packages
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{parskip}
+\usepackage{amssymb}
+\usepackage{amsthm, thmtools}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\usepackage{mathtools}
+\usepackage{algorithm, algorithmic, caption}
+\usepackage{stmaryrd}
+\usepackage{dsfont}
+\usepackage[all]{xy}
+\usepackage{enumitem}
+\usepackage[top=2.3cm, bottom=2.3cm, left=2.2cm, right=2.2cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{multicol}
+\usepackage{nameref, hyperref, cleveref}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{titling}
+\usepackage{tikz}
+\usepackage{caption}
+\usepackage{subcaption}
+
+% -------------------------------------------------------
+% Title, head, foot
+
+\titleformat{\chapter}
+  {\normalfont\LARGE\bfseries}{\thechapter}{1em}{}
+\titlespacing*{\chapter}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
+
+\def\course#1{\def\@course{#1}}
+\course{ }
+
+\def\doctype#1{\def\@doctype{#1}}
+\def\coursetitle#1{\def\@coursetitle{#1}}
+\def\semester#1{\def\@semester{#1}}
+\def\instructor#1{\def\@instructor{#1}}
+\def\student#1{\def\@student{#1}}
+\def\worknumber#1{\def\@worknumber{#1}}
+\def\workdate#1{\def\@workdate{#1}}
+
+\def\xxx{\vphantom{()}}
+\def\maketitle
+{
+\def\@oddhead{\underline{\hbox to\textwidth{\textbf{%
+	\rlap{\@course\phantom{()}}\hfil
+	\@doctype~\@worknumber~--- \@workdate
+	\hfil\llap{\@semester}}}}}
+\def\@oddfoot{\hfil\thepage\hfil}
+\def\ps@myfirst{\ps@plain\def\@oddfoot{\hfil\thepage\hfil}}
+\thispagestyle{myfirst}
+\noindent
+\framebox[\textwidth]{\vbox to 0.75in{
+\hbox to\textwidth{~\textbf{\rlap{\@course\@coursetitle\xxx}
+	\hfil\llap{\@semester\,}}~}
+\vss
+\hbox to \textwidth{\Large\hfill \@doctype~\@worknumber~--- \@workdate\hfill}
+\vss
+\hbox to \textwidth{~\textsl{\rlap{ Instructor: \@instructor\xxx}
+	\hfill\llap{Student: \@student\,}}~}
+}}
+\bigskip
+\vspace*{1cm}
+}
+
+\author{}
+\date{}
+
+% -------------------------------------------------------
+
+
+\hypersetup{
+	pdfnewwindow=false,
+	colorlinks=true,
+	linkcolor=black,
+	filecolor=black,
+	urlcolor=blue,
+	}
+
+\setlength{\columnseprule}{0.1pt}
+
+\allowdisplaybreaks
+\jot=0pt
+
+% -------------------------------------------------------
+% Notations
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Rp}{\mathbb{R}^p}
+\newcommand\Sb{{\mathbb S}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\T}{\mathbb{T}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\E}{\mathbb{E}}
+
+\newcommand{\Acal}{\mathcal{A}}
+\newcommand{\Bcal}{\mathcal{B}}
+\newcommand{\Ccal}{{\mathcal{C}}}
+\newcommand{\Dcal}{\mathcal{D}}
+\newcommand{\Ecal}{\mathcal{E}}
+\newcommand{\Fcal}{\mathcal{F}}
+\newcommand{\Gcal}{\mathcal{G}} 
+\newcommand{\Hcal}{\mathcal{H}}
+\newcommand{\Ical}{\mathcal{I}} 
+\newcommand{\Jcal}{\mathcal{J}}
+\newcommand{\Kcal}{\mathcal{K}} 
+\newcommand{\Lcal}{\mathcal{L}} 
+\newcommand{\Mcal}{\mathcal{M}} 
+\newcommand{\Ncal}{\mathcal{N}} 
+\newcommand{\Ocal}{\mathcal{O}} 
+\newcommand{\Pcal}{\mathcal{P}} 
+\newcommand{\Qcal}{\mathcal{Q}} 
+\newcommand{\Rcal}{\mathcal{R}} 
+\newcommand{\Scal}{\mathcal{S}}
+\newcommand{\Tcal}{\mathcal{T}} 
+\newcommand{\Ucal}{\mathcal{U}} 
+\newcommand{\Vcal}{\mathcal{V}} 
+\newcommand{\Wcal}{\mathcal{W}} 
+\newcommand{\Xcal}{\mathcal{X}}
+\newcommand{\Ycal}{\mathcal{Y}}
+\newcommand{\Zcal}{\mathcal{Z}}
+
+\newcommand{\ab}{\mathbf{a}}    %vector of offsets
+\newcommand{\Ab}{\mathbf{A}}    %vector of offsets
+\newcommand{\bb}{\mathbf{b}}    %vector of offsets
+\newcommand{\fb}{\mathbf{f}}    %vector of offsets
+\newcommand{\eb}{\mathbf{e}}
+\newcommand{\Eb}{\mathbf{E}}    %expectation \E(x)
+\newcommand{\Db}{\mathbf{D}}    %expectation \E(x)
+\newcommand{\Gb}{\mathbf{G}}
+\newcommand{\ib}{\mathbf{i}}   
+\newcommand\Ib{\mathbf{I}}
+\newcommand{\Kb}{\mathbf{K}}   
+\newcommand{\Lb}{\mathbf{L}}
+\newcommand{\Pb}{\mathbf{P}}
+\newcommand{\Qb}{\mathbf{Q}}
+\newcommand{\tb}{\mathbf{t}}    
+\newcommand{\ub}{\mathbf{u}}   
+\newcommand{\Ub}{\mathbf{U}}
+\newcommand{\vb}{\mathbf{v}}    
+\newcommand{\xb}{\mathbf{x}}    %training patterns
+\newcommand{\wb}{\mathbf{w}}    %weight vector
+\newcommand{\Wb}{\mathbf{W}}    %weight vector
+\newcommand{\Xb}{\mathbf{X}}    %training patterns
+\newcommand{\yb}{\mathbf{y}}    %auxiliary vector y
+\newcommand{\gb}{\mathbf{g}}    %auxiliary vector g
+\newcommand{\Yb}{\mathbf{Y}}    %training patterns
+\newcommand{\zb}{\mathbf{z}}    %pairs of x and y
+\newcommand{\Zb}{\mathbf{Z}}    
+
+\newcommand{\etab}{\mathbf{\eta}}
+
+\newcommand{\mipi}{[- \infty, + \infty]}
+
+
+\newcommand{\tf}[1]{\mathcal{F}\left(#1\right)}
+\newcommand{\tfi}[1]{\overline{\mathcal{F}}\left(#1\right)}
+
+\newcommand{\cps}[2]{#1 \overset{p.s.}{\longrightarrow} #2}
+\newcommand{\cprob}[2]{#1 \overset{\P}{\longrightarrow} #2}
+\newcommand{\clp}[2]{#1 \overset{\Lp}{\longrightarrow} #2}
+\newcommand{\claw}[2]{#1 \Longrightarrow #2}
+\newcommand{\cdistr}[2]{#1 \overset{d}{\longrightarrow} #2}
+
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\epi}{epi}
+\DeclareMathOperator{\relint}{relint}
+\DeclareMathOperator{\prox}{prox}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\Diag}{Diag}
+\DeclareMathOperator{\Ker}{Ker}
+\DeclareMathOperator{\sign}{sign}
+
+\newcommand{\ie}{\textit{i.e.\,}}
+\newcommand{\eg}{\textit{e.g.\,}}
+
+\newcommand{\lp}{\left(}
+\newcommand{\lc}{\left[}
+\newcommand{\rp}{\right)}
+\newcommand{\rc}{\right]}
+
+\newcommand{\br}[1]{\left( #1 \right)}
+\newcommand{\sqb}[1]{\left[ #1 \right]}
+\newcommand {\cbr}[1]{\left\{#1 \right\}}
+\newcommand {\inp}[1]{\left\langle #1 \right\rangle}
+\newcommand {\abs}[1]{\left\vert\, #1 \,\right\vert}
+\newcommand{\norm}[1]{\left|\left| #1 \right|\right|}
+\newcommand{\set}[2]{\left\{ #1 \mid #2\right\}}
